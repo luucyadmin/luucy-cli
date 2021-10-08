@@ -1,3 +1,5 @@
+[![npm version](http://badge.acryps.com/npm/luucy-cli)](http://badge.acryps.com/go/npm/luucy-cli)
+
 # luucy cli
 CLI for luucy plugin development
 
