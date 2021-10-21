@@ -165,7 +165,7 @@ section.add(helloWorld);
         }
 
         console.log(`writing bundle '${package.name}'...`);
-        fs.writeFileSync(`${bundle.id}.plugin`, buffer);
+        fs.writeFileSync(`${bundle.id}.plugin`, buffer.toString("hex"));
 
         console.log(`'${package.name}' build!\n`);
         console.log(`Go to the following page and upload '${bundle.id}.plugin'`);
