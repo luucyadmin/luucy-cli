@@ -105,9 +105,9 @@ section.add(helloWorld);
                 } else if (message.log) {
                     console.log(logger, ...message.log);
                 } else if (message.warn) {
-                    console.warn(logger, ...message.warn);
+                    console.warn(logger, "\x1b[31;42m", ...message.warn, "\x1b[0m");
                 } else if (message.error) {
-                    console.error(logger, ...message.error);
+                    console.error(logger, "\x1b[93;42m", ...message.error, "\x1b[0m");
                 } else {
                     console.log("Unknown message", message);
                 }
