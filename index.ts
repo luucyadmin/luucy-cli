@@ -164,11 +164,22 @@ section.add(helloWorld);
             buffer[i] ^= 0x51;
         }
 
+        let binary = buffer.toString("hex");
+        const parts = [];
+
+        for (let i = 0; i < binary.length; i += 64) {
+            parts.push(binary.substring(0, 64));
+
+            binary = binary.substring(64);
+        }
+
+        parts.push(binary);
+
         console.log(`writing bundle '${package.name}'...`);
-        fs.writeFileSync(`${bundle.id}.plugin`, buffer.toString("hex"));
+        fs.writeFileSync("plugin.lpb", parts.join("\n"));
 
         console.log(`'${package.name}' build!\n`);
-        console.log(`Go to the following page and upload '${bundle.id}.plugin'`);
+        console.log(`Go to the following page and upload 'plugin.lpb'`);
         console.log(`\x1b[1m\x1b[4mhttps://luucy.ch/marketplace/upload\x1b[0m`);
 
         process.exit(0);
