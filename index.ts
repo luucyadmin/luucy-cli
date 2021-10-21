@@ -164,19 +164,8 @@ section.add(helloWorld);
             buffer[i] ^= 0x51;
         }
 
-        let binary = buffer.toString("hex");
-        const parts = [];
-
-        for (let i = 0; i < binary.length; i += 64) {
-            parts.push(binary.substring(0, 64));
-
-            binary = binary.substring(64);
-        }
-
-        parts.push(binary);
-
         console.log(`writing bundle '${package.name}'...`);
-        fs.writeFileSync("plugin.lpb", parts.join("\n"));
+        fs.writeFileSync("plugin.lpb", buffer.toString("hex").match(/[a-f0-9]{1,64}/g).join("\n"));
 
         console.log(`'${package.name}' build!\n`);
         console.log(`Go to the following page and upload 'plugin.lpb'`);
