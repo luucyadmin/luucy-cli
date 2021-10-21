@@ -5,6 +5,10 @@
         "luucy": "bin/luucy.js"
     },
     "main": "dist/index.js",
+    "scripts": {
+        "preversion": "tsc",
+        "prepublish": "git push"
+    },
     "devDependencies": {
         "@types/node": "^16.10.2"
     },
