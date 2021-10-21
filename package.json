@@ -4,6 +4,7 @@
     "bin": {
         "luucy": "bin/luucy.js"
     },
+    "main": "dist/index.js",
     "devDependencies": {
         "@types/node": "^16.10.2"
     },
