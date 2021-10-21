@@ -7,6 +7,8 @@ const ws = require("express-ws");
 
 const action = process.argv.reverse().find(arg => arg[0] != "-");
 
+const distFile = "dist.lps";
+
 switch (action) {
     case "create": {
         const name = readline.question("Module name (example: Heatwatt Calculator): ");
@@ -34,7 +36,7 @@ switch (action) {
             compilerOptions: {
                 module: "none",
                 moduleResolution: "classic",
-                outFile: "dist.lps",
+                outFile: distFile,
                 target: "es2018",
                 noLib: true,
                 typeRoots: ["node_modules/luucy-types"]
@@ -48,7 +50,8 @@ switch (action) {
         fs.writeFileSync(path.join(name, "package.json"), JSON.stringify({
             name: id,
             displayName: name,
-            author: author
+            author: author,
+            version: "1.0.0"
         }));
 
         fs.writeFileSync(path.join(name, "plugin.ts"), `
@@ -118,8 +121,56 @@ section.add(helloWorld);
         });
 
         console.log("starting server...");
+        
         const server = app.listen(0, () => {
             console.log(`\nopen the following link to try out '${package.displayName}'\n\x1b[1m\x1b[4m${host}/workspaces#${package.name}:${server.address().port}\x1b[0m`);
         });
+
+        break;
+    }
+
+    case "publish": {
+        console.log("reading package.json...");
+        const package = JSON.parse(fs.readFileSync("package.json").toString());
+
+        console.log(`building '${package.name}'...`);
+        const tsc = childProcess.spawnSync("tsc");
+
+        if (tsc.status) {
+            console.error(`building '${package.name}' failed!`);
+
+            console.error(tsc.output.join(""));
+            console.error(tsc.error);
+
+            process.exit(1);
+        }
+
+        console.log(`reading package '${package.name}'...`);
+        const source = fs.readFileSync(distFile);
+
+        console.log(`packing '${package.name}'...`);
+        const bundle = {
+            id: package.name,
+            name: package.displayName,
+            author: package.author,
+            version: package.version,
+            luucy: package.dependencies["luucy-types"].replace(/[^\.0-9]/g, ""),
+            source: source
+        };
+
+        const buffer = Buffer.from(JSON.stringify(bundle), "utf8");
+
+        for (let i = 0; i < buffer.length; i++) {
+            buffer[i] ^= 0x51;
+        }
+
+        console.log(`writing bundle '${package.name}'...`);
+        fs.writeFileSync(`${bundle.id}.plugin`, buffer);
+
+        console.log(`'${package.name}' build!\n`);
+        console.log(`Go to the following page and upload '${bundle.id}.plugin'`);
+        console.log(`\x1b[1m\x1b[4mhttps://luucy.ch/marketplace/upload\x1b[0m`);
+
+        process.exit(0);
     }
 }
