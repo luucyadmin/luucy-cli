@@ -92,17 +92,15 @@ section.add(helloWorld);
 
             fs.watch("dist.lps", () => {
                 if (fs.existsSync("dist.lps")) {
-                    process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${package.name}...\x1b[0m\n`);
-
                     const updatedSource = fs.readFileSync("dist.lps").toString();
 
                     if (updatedSource != source) {
+                        process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${package.name}...\x1b[0m\n`);
+
                         source = updatedSource;
 
                         socket.send(source);
                     }
-
-                    
                 }
             });
             
