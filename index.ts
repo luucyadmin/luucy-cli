@@ -86,13 +86,23 @@ section.add(helloWorld);
         app.ws("/socket", socket => {
             process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] sending plugin...\x1b[0m\n`);
 
-            socket.send(fs.readFileSync("dist.lps").toString());
+            let source = fs.readFileSync("dist.lps").toString();
+
+            socket.send(source);
 
             fs.watch("dist.lps", () => {
                 if (fs.existsSync("dist.lps")) {
                     process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${package.name}...\x1b[0m\n`);
 
-                    socket.send(fs.readFileSync("dist.lps").toString());
+                    const updatedSource = fs.readFileSync("dist.lps").toString();
+
+                    if (updatedSource != source) {
+                        source = updatedSource;
+
+                        socket.send(source);
+                    }
+
+                    
                 }
             });
             
