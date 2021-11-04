@@ -15,6 +15,7 @@
     "dependencies": {
         "express": "^4.17.1",
         "express-ws": "^5.0.2",
-        "readline-sync": "^1.4.10"
+        "readline-sync": "^1.4.10",
+        "tar": "^6.1.11"
     }
 }

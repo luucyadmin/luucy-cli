@@ -4,10 +4,15 @@ const path = require("path");
 const fs = require("fs");
 const express = require("express");
 const ws = require("express-ws");
+const tar = require("tar");
+
+const icon = require("./icon");
 
 const action = process.argv.reverse().find(arg => arg[0] != "-");
 
 const distFile = "dist.lps";
+const assetsDirectory = "assets";
+const iconFile = "assets/icon.svg";
 
 switch (action) {
     case "create": {
@@ -64,6 +69,9 @@ section.add(helloWorld);
 
         `.trim());
 
+        fs.mkdirSync(assetsDirectory);
+        fs.writeFileSync(iconFile, icon);
+
         console.log("installing luucy-types...");
         childProcess.spawnSync("npm", ["install", "luucy-types"], {
             cwd: name
@@ -86,13 +94,17 @@ section.add(helloWorld);
         app.ws("/socket", socket => {
             process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] sending plugin...\x1b[0m\n`);
 
-            let source = fs.readFileSync("dist.lps").toString();
+            let source;
+            
+            if (fs.existsSync(distFile)) {
+                source = fs.readFileSync(distFile).toString();
 
-            socket.send(source);
+                socket.send(source);
+            }
 
-            fs.watch("dist.lps", () => {
-                if (fs.existsSync("dist.lps")) {
-                    const updatedSource = fs.readFileSync("dist.lps").toString();
+            fs.watch(distFile, () => {
+                if (fs.existsSync(distFile)) {
+                    const updatedSource = fs.readFileSync(distFile).toString();
 
                     if (updatedSource != source) {
                         process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${package.name}...\x1b[0m\n`);
@@ -166,14 +178,9 @@ section.add(helloWorld);
             source: source
         };
 
-        const buffer = Buffer.from(JSON.stringify(bundle), "utf8");
-
-        for (let i = 0; i < buffer.length; i++) {
-            buffer[i] ^= 0x51;
-        }
-
         console.log(`writing bundle '${package.name}'...`);
-        fs.writeFileSync("plugin.lpb", buffer.toString("hex").match(/[a-f0-9]{1,64}/g).join("\n"));
+        
+        tar.create([distFile, "package.json", assetsDirectory]).pipe(fs.createWriteStream("plugin.lpb"));
 
         console.log(`'${package.name}' build!\n`);
         console.log(`Go to the following page and upload 'plugin.lpb'`);
