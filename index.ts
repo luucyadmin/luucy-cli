@@ -91,6 +91,8 @@ section.add(helloWorld);
         console.log("reading package.json...");
         const package = JSON.parse(fs.readFileSync("package.json").toString());
 
+        app.get("/assets", express.static("/assets"));
+
         app.ws("/socket", socket => {
             process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] sending plugin...\x1b[0m\n`);
 
