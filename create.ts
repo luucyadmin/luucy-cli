@@ -1,11 +1,10 @@
-import { Constants } from "./constants";
-
 const fs = require("fs");
 const path = require("path");
 const childProcess = require("child_process");
 const readline = require("readline-sync");
 
 const icon = require("./icon");
+const Constants = require("./constants").Constants;
 
 export class Creator {
     create() {

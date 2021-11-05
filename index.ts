@@ -1,13 +1,12 @@
-import { Creator } from "./create";
-import { Publisher } from "./publisher";
-import { Serve } from "./serve";
-
 const childProcess = require("child_process");
 const path = require("path");
 const fs = require("fs");
 const tar = require("tar");
 
 const icon = require("./icon");
+const Creator = require("./create").Creator;
+const Publisher = require("./publisher").Publisher;
+const Serve = require("./serve").Serve;
 
 const action = process.argv.reverse().find(arg => arg[0] != "-");
 

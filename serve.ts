@@ -1,10 +1,10 @@
-import { Constants } from "./constants";
-
 const express = require("express");
 const childProcess = require("child_process");
 const ws = require("express-ws");
 const fs = require("fs");
 const path = require("path");
+
+const Constants = require("./constants").Constants;
 
 export class Serve {
     constructor(
