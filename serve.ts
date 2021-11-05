@@ -91,9 +91,9 @@ export class Serve {
     }
 
     bundle(source: string, packageConfiguration) {
-        return {
+        return JSON.stringify({
             name: packageConfiguration.displayName,
             source
-        }
+        });
     }
 }
