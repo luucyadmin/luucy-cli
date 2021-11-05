@@ -48,7 +48,7 @@ section.add(helloWorld);
         `.trim());
 
         fs.mkdirSync(Constants.assetsDirectory);
-        fs.writeFileSync(Constants.iconFile, getIcon());
+        fs.writeFileSync(Constants.iconFile, this.getIcon());
 
         console.log("installing luucy-types...");
         childProcess.spawnSync("npm", ["install", "luucy-types"], {
