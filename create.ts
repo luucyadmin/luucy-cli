@@ -4,9 +4,9 @@ const childProcess = require("child_process");
 const readline = require("readline-sync");
 
 const icon = require("./icon");
-const Constants = require("./constants").Constants;
+const Constants = require("./constants");
 
-export class Creator {
+module.exports = class Creator {
     create() {
         const id = Array(64).fill(0).map(() => Math.random().toString(16)[4]).join("");
 

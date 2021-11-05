@@ -4,9 +4,9 @@ const ws = require("express-ws");
 const fs = require("fs");
 const path = require("path");
 
-const Constants = require("./constants").Constants;
+const Constants = require("./constants");
 
-export class Serve {
+module.exports = class Serve {
     constructor(
         private host: string
     ) {}

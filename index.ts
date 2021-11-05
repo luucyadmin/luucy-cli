@@ -4,9 +4,9 @@ const fs = require("fs");
 const tar = require("tar");
 
 const icon = require("./icon");
-const Creator = require("./create").Creator;
-const Publisher = require("./publisher").Publisher;
-const Serve = require("./serve").Serve;
+const Creator = require("./create");
+const Publisher = require("./publisher");
+const Serve = require("./serve");
 
 const action = process.argv.reverse().find(arg => arg[0] != "-");
 
