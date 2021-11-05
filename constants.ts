@@ -1,4 +1,4 @@
-module.exports = class Constants {
+export class Constants {
     static distFile = "dist.lps";
     static assetsDirectory = "assets";
     static iconFile = "assets/icon.svg";

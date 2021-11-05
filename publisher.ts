@@ -1,10 +1,10 @@
+import { Constants } from "./constants";
+
 const fs = require("fs");
 const tar = require("tar");
 const childProcess = require("child_process");
 
-const Constants = require("./constants");
-
-module.exports = class Publisher {
+export class Publisher {
     constructor() {}
 
     publish() {
