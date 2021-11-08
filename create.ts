@@ -10,7 +10,7 @@ export class Creator {
         const id = Array(64).fill(0).map(() => Math.random().toString(16)[4]).join("");
 
         const name = readline.question("Module name (example: Heatwatt Calculator): ");
-        const author = readline.question("Author (example: Heatwatt AG): ");
+        const author = readline.question("Author / Company (example: Heatwatt AG): ");
 
         console.log("creating project files...");
         fs.mkdirSync(name);
@@ -55,7 +55,7 @@ section.add(helloWorld);
             cwd: name
         });
 
-        console.log("\ndone! use 'luucy serve' to try out your plugin");
+        console.log(`\ndone! open ${path.join(process.cwd(), name)} in your editor of choice and use 'luucy serve' to try out your plugin`);
     }
 
     getIcon() {
