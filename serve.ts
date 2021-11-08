@@ -40,7 +40,7 @@ export class Serve {
                     const updatedSource = fs.readFileSync(Constants.distFile).toString();
 
                     if (updatedSource != source) {
-                        process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${packageConfiguration.name}...\x1b[0m\n`);
+                        process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${packageConfiguration.displayName}...\x1b[0m\n`);
 
                         source = updatedSource;
 
@@ -53,15 +53,15 @@ export class Serve {
                 const message = JSON.parse(data);
 
                 if (message.installed) {
-                    process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] installed ${packageConfiguration.name}\x1b[0m\n`);
+                    process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] installed ${packageConfiguration.displayName}\x1b[0m\n`);
                 } else if (message.installationError) {
-                    process.stdout.write(`[${new Date().toLocaleTimeString()}] ${packageConfiguration.name} install failed!\n\n\x1b[1;31m${message.installationError}\x1b[0m`);
+                    process.stdout.write(`[${new Date().toLocaleTimeString()}] ${packageConfiguration.displayName} install failed!\n\n\x1b[1;31m${message.installationError}\x1b[0m`);
                 } else if (message.log) {
-                    console.log(`\x1b[3m[${packageConfiguration.name}]\x1b[0m`, ...message.log);
+                    console.log(`\x1b[3m[${packageConfiguration.displayName}]\x1b[0m`, ...message.log);
                 } else if (message.warn) {
-                    console.warn(`\x1b[3;33m[${packageConfiguration.name}]\x1b[0;33m`, ...message.warn, "\x1b[0m");
+                    console.warn(`\x1b[3;33m[${packageConfiguration.displayName}]\x1b[0;33m`, ...message.warn, "\x1b[0m");
                 } else if (message.error) {
-                    console.error(`\x1b[3;31m[${packageConfiguration.name}]\x1b[1;31m`, ...message.error, "\x1b[0m");
+                    console.error(`\x1b[3;31m[${packageConfiguration.displayName}]\x1b[1;31m`, ...message.error, "\x1b[0m");
                 } else {
                     console.log("Unknown message", message);
                 }
