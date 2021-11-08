@@ -11,11 +11,11 @@ export class Publisher {
         console.log("reading package.json...");
         const packageConfiguration = JSON.parse(fs.readFileSync("package.json").toString());
 
-        console.log(`building '${packageConfiguration.name}'...`);
+        console.log(`building '${packageConfiguration.displayName}'...`);
         const tsc = childProcess.spawnSync("tsc");
 
         if (tsc.status) {
-            console.error(`building '${packageConfiguration.name}' failed!`);
+            console.error(`building '${packageConfiguration.displayName}' failed!`);
 
             console.error(tsc.output.join(""));
             console.error(tsc.error);
@@ -23,10 +23,10 @@ export class Publisher {
             process.exit(1);
         }
 
-        console.log(`reading package '${packageConfiguration.name}'...`);
+        console.log(`reading package '${packageConfiguration.displayName}'...`);
         const source = fs.readFileSync(Constants.distFile);
 
-        console.log(`packing '${packageConfiguration.name}'...`);
+        console.log(`packing '${packageConfiguration.displayName}'...`);
         const bundle = {
             id: packageConfiguration.name,
             name: packageConfiguration.displayName,
@@ -36,7 +36,7 @@ export class Publisher {
             source: source
         };
 
-        console.log(`writing bundle '${packageConfiguration.name}'...`);
+        console.log(`writing bundle '${packageConfiguration.displayName}'...`);
         
         tar.create([
             Constants.distFile, 
@@ -44,7 +44,7 @@ export class Publisher {
             Constants.assetsDirectory
         ]).pipe(fs.createWriteStream("plugin.lpb"));
 
-        console.log(`'${packageConfiguration.name}' build!\n`);
+        console.log(`'${packageConfiguration.displayName}' build!\n`);
         console.log(`Go to the following page and upload 'plugin.lpb'`);
         console.log(`\x1b[1m\x1b[4mhttps://luucy.ch/marketplace/upload\x1b[0m`);
     }
