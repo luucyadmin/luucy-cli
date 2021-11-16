@@ -40,7 +40,7 @@ export class Serve {
                     const updatedSource = fs.readFileSync(Constants.distFile).toString();
 
                     if (updatedSource != source) {
-                        process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] updating ${packageConfiguration.displayName}...\x1b[0m\n`);
+                        process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${packageConfiguration.displayName}...\x1b[0m\n`);
 
                         source = updatedSource;
 
