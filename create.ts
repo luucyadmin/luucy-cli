@@ -22,6 +22,7 @@ export class Creator {
                 outFile: Constants.distFile,
                 target: "es2018",
                 noLib: true,
+                noEmitHelpers: true,
                 typeRoots: ["node_modules/luucy-types"]
             },
             include: [
