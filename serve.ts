@@ -55,7 +55,7 @@ export class Serve {
                 if (message.installed) {
                     process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] installed ${packageConfiguration.displayName}\x1b[0m\n`);
                 } else if (message.installationError) {
-                    process.stdout.write(`[${new Date().toLocaleTimeString()}] ${packageConfiguration.displayName} install failed!\n\n\x1b[1;31m${message.installationError}\x1b[0m`);
+                    process.stdout.write(`[${new Date().toLocaleTimeString()}]\x1b[1;31m ${packageConfiguration.displayName} install failed!\n\n${message.installationError}\x1b[0m\n\n`);
                 } else if (message.log) {
                     console.log(`\x1b[3m[${packageConfiguration.displayName}]\x1b[0m`, ...message.log);
                 } else if (message.warn) {
