@@ -7,7 +7,7 @@ const childProcess = require("child_process");
 export class Publisher {
     constructor() {}
 
-    publish() {
+    async publish() {
         console.log("reading package.json...");
         const packageConfiguration = JSON.parse(fs.readFileSync("package.json").toString());
 
@@ -38,14 +38,16 @@ export class Publisher {
 
         console.log(`writing bundle '${packageConfiguration.displayName}'...`);
         
-        tar.create([
+        await tar.create({
+            file: "plugin.lpb"
+        }, [
             Constants.distFile, 
             "package.json", 
             Constants.assetsDirectory
-        ]).pipe(fs.createWriteStream("plugin.lpb")).on("finish", () => {
-            console.log(`'${packageConfiguration.displayName}' build!\n`);
-            console.log(`Go to the following page and upload 'plugin.lpb'`);
-            console.log(`\x1b[1m\x1b[4mhttps://luucy.ch/marketplace/upload\x1b[0m`);
-        });
+        ])
+            
+        console.log(`'${packageConfiguration.displayName}' build!\n`);
+        console.log(`Go to the following page and upload 'plugin.lpb'`);
+        console.log(`\x1b[1m\x1b[4mhttps://luucy.ch/marketplace/upload\x1b[0m`);
     }
 }

@@ -26,8 +26,8 @@ switch (action) {
 
     case "publish": {
         const publisher = new Publisher();
-        publisher.publish();
-
-        process.exit(0);
+        publisher.publish().then(() => {
+            process.exit(0);
+        });
     }
 }
