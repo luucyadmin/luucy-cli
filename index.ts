@@ -18,7 +18,21 @@ switch (action) {
     }
 
     case "serve": {
-        const serve = new Serve(process.argv.includes("--test") ? "http://localhost:4200" : "https://luucy.ch");
+        const environments = {
+            test: "http://localhost:4200",
+            staging: "https://staging.luucy.ch",
+            productive: "https://luucy.ch"
+        };
+
+        let host = environments.productive;
+
+        for (let environment in environments) {
+            if (process.argv.includes(`--${environment}`)) {
+                host = environments[environment];
+            }
+        }
+
+        const serve = new Serve(host);
         serve.start();
 
         break;
