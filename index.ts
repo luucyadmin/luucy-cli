@@ -86,10 +86,10 @@ switch (action) {
         longest += 3;
 
         for (let option of options) {
-            process.stdout.write(`${option.name.padStart(longest)}${option.purpose}\n`);
+            process.stdout.write(`${option.name.padEnd(longest)}${option.purpose}\n`);
 
             for (let argument of option.arguments || []) {
-                process.stdout.write(`    ${argument.name.padStart(longest - 4)}${argument.purpose}\n`);
+                process.stdout.write(`    ${argument.name.padEnd(longest - 4)}${argument.purpose}\n`);
             }
         }
     }    
