@@ -7,6 +7,8 @@ const readline = require("readline-sync");
 
 export class Creator {
     create() {
+        process.stdout.write("welcome to luucy!\n\n");
+
         const id = Array(64).fill(0).map(() => Math.random().toString(16)[4]).join("");
 
         const name = readline.question("Module name (example: Heatwatt Calculator): ");

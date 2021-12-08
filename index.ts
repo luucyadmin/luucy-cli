@@ -15,6 +15,16 @@ const environments = {
     productive: "https://luucy.ch"
 };
 
+const packageConfiguration = require("../package.json");
+
+process.stdout.write("\x1b[38;5;122m    ______       __\n");
+process.stdout.write("   /     /\\     / /_  ____  _________  __\n");
+process.stdout.write("  /_____/  \\   / / / / / / / / ___/ / / /\n");
+process.stdout.write("  \\     \\  /  / / /_/ / /_/ / /__/ /_/ /\n");
+process.stdout.write("   \\_____\\/  /_/\\__,_/\\__,_/\\___/\\__, /\n");
+process.stdout.write("                                /____/\n");
+process.stdout.write(`    \x1b[2m${packageConfiguration.version.padEnd(20)}\x1b[0m\n\n`)
+
 switch (action) {
     case "create": {
         const creator = new Creator();
@@ -50,8 +60,6 @@ switch (action) {
     }
 
     default: {
-        const packageConfiguration = require("../package.json");
-
         process.stdout.write(`luucy cli v${packageConfiguration.version}\n\n`);
 
         const options = [

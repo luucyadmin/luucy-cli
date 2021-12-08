@@ -1,15 +1,18 @@
 [![npm version](http://badge.acryps.com/npm/luucy-cli)](http://badge.acryps.com/go/npm/luucy-cli)
 
-# luucy cli
-CLI for luucy plugin development
+# luucy command line interface
+Developer tool for luucy plugin development
 
-## Installing the CLI
-You need nodejs and npm installed.
-Type the following command in your terminal to install luucy cli.
+## Installing the develoepr tools / cli
+You need [nodejs and npm](https://nodejs.dev/learn/how-to-install-nodejs) installed.
+
+Type the following command in your terminal to install luucy cli on your system.
 
 ```
 $ npm install -g luucy-cli
 ```
+
+You can use the command line interface by typing `luucy` in a terminal.
 
 ## Create Project
 Open a terminal and type the following command to create a new plugin.
