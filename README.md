@@ -1,10 +1,10 @@
-[![npm version](http://badge.acryps.com/npm/luucy-cli)](http://badge.acryps.com/go/npm/luucy-cli)
+[![npm version](https://badge.acryps.com/npm/luucy-cli)](https://badge.acryps.com/go/npm/luucy-cli)
 
 # luucy command line interface
 Developer tool for luucy plugin development
 
 ## Installing the develoepr tools / cli
-You need [nodejs and npm](https://nodejs.dev/learn/how-to-install-nodejs) installed.
+You need to install [nodejs and npm](https://nodejs.dev/learn/how-to-install-nodejs) first.
 
 Type the following command in your terminal to install luucy cli on your system.
 
@@ -20,7 +20,16 @@ Open a terminal and type the following command to create a new plugin.
 $ luucy create
 ```
 
-Luucy CLI will create all required files after asking you for a name and a id.
+Luucy CLI will create all required files after asking you for a name and an author.
+
+Project Structure
+
+> `{Project Name}/`
+>> `package.json` &nbsp; Package configuration, contains name & author<br>
+>> `plugin.ts` &nbsp; Main plugin source file (edit this one)<br>
+>> `tsconfig.json` &nbsp; TypeScript compiler configuration (managed by luucy) <br><br>
+>> `assets/` &nbsp; Assets that will be available to your plugin
+>>> `icon.svg` &nbsp; Icon for your plugin
 
 ## Serve Project
 Use the following command to open the plugin in luucy locally.
