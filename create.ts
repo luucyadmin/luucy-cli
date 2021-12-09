@@ -42,7 +42,7 @@ export class Creator {
 			displayName: name,
 			author: author,
 			version: "1.0.0"
-		}));
+		}, null, "\t"));
 
 		fs.writeFileSync(path.join(name, "plugin.ts"), `
 		
@@ -58,7 +58,7 @@ section.add(helloWorld);
 		fs.writeFileSync(path.join(name, Constants.iconFile), this.getIcon());
 
 		console.log("installing luucy-types...");
-		childProcess.spawnSync("npm", ["install", "luucy-types"], {
+		childProcess.spawnSync("npm", ["install", Constants.typesPackage], {
 			cwd: name
 		});
 

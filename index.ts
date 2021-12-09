@@ -1,6 +1,7 @@
 import { Creator } from "./create";
 import { Publisher } from "./publisher";
 import { Serve } from "./serve";
+import { Updater } from "./updater";
 
 const childProcess = require("child_process");
 const path = require("path");
@@ -53,6 +54,15 @@ switch (action) {
     case "publish": {
         const publisher = new Publisher();
         publisher.publish().then(() => {
+            process.exit(0);
+        });
+
+        break;
+    }
+
+    case "upgrade": {
+        const updater = new Updater();
+        updater.update().then(() => {
             process.exit(0);
         });
 
