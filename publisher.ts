@@ -39,10 +39,12 @@ export class Publisher {
             process.exit(1);
         }
 
-        console.log(`packing '${packageConfiguration.displayName}'...`);
+        const fileName = `${packageConfiguration.displayName.toLowerCase().trim().replace(/[^a-z0-9]/, "-").replace(/\-+/, "-")}-${version}.lpb`;
+
+        console.log(`packing '${packageConfiguration.displayName}' into '${fileName}'...`);
         
         await tar.create({
-            file: "plugin.lpb"
+            file: fileName
         }, [
             Constants.distFile, 
             "package.json", 
@@ -50,7 +52,7 @@ export class Publisher {
         ])
             
         console.log(`'${packageConfiguration.displayName}' (v${version}) built and packaged!\n`);
-        console.log(`Go to the following page and upload 'plugin.lpb'`);
+        console.log(`Go to the following page and upload '${fileName}'`);
         console.log(`\x1b[1m\x1b[4mhttps://luucy.ch/marketplace/upload\x1b[0m`);
     }
 }
