@@ -16,8 +16,12 @@ export class Serve {
         const app = express();
         ws(app);
 
-        console.log("reading package.json...");
-        const packageConfiguration = JSON.parse(fs.readFileSync("package.json").toString());
+        const readPackageConfiguration = () => {
+            return JSON.parse(fs.readFileSync(Constants.packageFile).toString());
+        };
+
+        console.log(`reading ${Constants.packageFile}...`);
+        let packageConfiguration = readPackageConfiguration();
 
         const assetsPath = path.join(process.cwd(), "assets");
 
@@ -35,19 +39,24 @@ export class Serve {
                 socket.send(this.bundle(source, packageConfiguration));
             }
 
-            fs.watch(Constants.distFile, () => {
+            const update = () => {
                 if (fs.existsSync(Constants.distFile)) {
                     const updatedSource = fs.readFileSync(Constants.distFile).toString();
+                    const updatedPackageConfiguration = readPackageConfiguration();
 
-                    if (updatedSource != source) {
+                    if (updatedSource != source && JSON.stringify(packageConfiguration) != JSON.stringify(updatedPackageConfiguration)) {
                         process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${packageConfiguration.displayName}...\x1b[0m\n`);
 
                         source = updatedSource;
+                        packageConfiguration = updatedPackageConfiguration;
 
                         socket.send(this.bundle(source, packageConfiguration));
                     }
                 }
-            });
+            };
+
+            fs.watch(Constants.distFile, () => update());
+            fs.watch(Constants.packageFile, () => update());
             
             socket.on("message", data => {
                 const message = JSON.parse(data);

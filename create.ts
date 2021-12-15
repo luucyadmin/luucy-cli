@@ -37,7 +37,7 @@ export class Creator {
 }
 `.trim());
 
-		fs.writeFileSync(path.join(name, "package.json"), JSON.stringify({
+		fs.writeFileSync(path.join(name, Constants.packageFile), JSON.stringify({
 			name: id,
 			displayName: name,
 			author: author,

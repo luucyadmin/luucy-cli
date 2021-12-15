@@ -18,14 +18,14 @@ export class Updater {
     }
 
     getTypeVersion() {
-        const packageConfiguration = JSON.parse(fs.readFileSync("package.json"));
+        const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile));
 
         if (!packageConfiguration.dependencies) {
-            throw new Error("No dependencies in package.json");
+            throw new Error(`No dependencies in ${Constants.packageFile}`);
         }
 
         if (!packageConfiguration.dependencies[Constants.typesPackage]) {
-            throw new Error(`No '${Constants.typesPackage}' dependency in package.json`);
+            throw new Error(`No '${Constants.typesPackage}' dependency in ${Constants.packageFile}`);
         }
 
         return packageConfiguration.dependencies[Constants.typesPackage].replace(/[^0-9\.]/g, "");

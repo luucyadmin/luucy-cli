@@ -1,5 +1,6 @@
 export class Constants {
     static distFile = "dist.lps";
+    static packageFile = "package.json";
     static assetsDirectory = "assets";
     static iconFile = "assets/icon.svg";
 

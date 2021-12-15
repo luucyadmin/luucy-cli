@@ -88,6 +88,10 @@ switch (action) {
             { 
                 name: "luucy publish", 
                 purpose: "Publish a plugin to the luucy marketplace" 
+            },
+            {
+                name: "luucy upgrade",
+                purpose: "Upgrades the luucy type mappings"
             }
         ];
 
