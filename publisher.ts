@@ -1,6 +1,7 @@
 import { Constants } from "./constants";
 
 const fs = require("fs");
+const path = require("path");
 const tar = require("tar");
 const childProcess = require("child_process");
 const readline = require("readline-sync");
@@ -39,31 +40,24 @@ export class Publisher {
             process.exit(1);
         }
 
-        console.log(`reading package '${packageConfiguration.displayName}'...`);
-        const source = fs.readFileSync(Constants.distFile);
+        const fileName = path.join(Constants.bundlesDirectory, Constants.bundleName(packageConfiguration.displayName, version));
 
-        console.log(`packing '${packageConfiguration.displayName}'...`);
-        const bundle = {
-            id: packageConfiguration.name,
-            name: packageConfiguration.displayName,
-            author: packageConfiguration.author,
-            version: version,
-            luucy: packageConfiguration.dependencies["luucy-types"].replace(/[^\.0-9]/g, ""),
-            source: source
-        };
+        if (!fs.existsSync(Constants.bundlesDirectory)) {
+            fs.mkdirSync(Constants.bundlesDirectory);
+        }
 
-        console.log(`writing bundle '${packageConfiguration.displayName}'...`);
+        console.log(`packing '${packageConfiguration.displayName}' into '${fileName}'...`);
         
         await tar.create({
-            file: "plugin.lpb"
+            file: fileName
         }, [
             Constants.distFile, 
             "package.json", 
             Constants.assetsDirectory
         ])
             
-        console.log(`'${packageConfiguration.displayName}' (v${version}) built!\n`);
-        console.log(`Go to the following page and upload 'plugin.lpb'`);
+        console.log(`'${packageConfiguration.displayName}' (v${version}) built and packaged!\n`);
+        console.log(`Go to the following page and upload '${fileName}'`);
         console.log(`\x1b[1m\x1b[4mhttps://luucy.ch/marketplace/upload\x1b[0m`);
     }
 }
