@@ -10,8 +10,8 @@ export class Publisher {
     constructor() {}
 
     async publish() {
-        console.log("reading package.json...");
-        const packageConfiguration = JSON.parse(fs.readFileSync("package.json").toString());
+        console.log(`reading ${Constants.packageFile}...`);
+        const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
 
         console.log(`building '${packageConfiguration.displayName}'...`);
         const tsc = childProcess.spawnSync("tsc");
