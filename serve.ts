@@ -44,7 +44,7 @@ export class Serve {
                     const updatedSource = fs.readFileSync(Constants.distFile).toString();
                     const updatedPackageConfiguration = readPackageConfiguration();
 
-                    if (updatedSource != source && JSON.stringify(packageConfiguration) != JSON.stringify(updatedPackageConfiguration)) {
+                    if (updatedSource != source || JSON.stringify(packageConfiguration) != JSON.stringify(updatedPackageConfiguration)) {
                         process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${packageConfiguration.displayName}...\x1b[0m\n`);
 
                         source = updatedSource;
