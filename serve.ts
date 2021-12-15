@@ -93,6 +93,7 @@ export class Serve {
     bundle(source: string, packageConfiguration) {
         return JSON.stringify({
             name: packageConfiguration.displayName,
+            configuration: packageConfiguration,
             source
         });
     }
