@@ -2,7 +2,6 @@ import { Constants } from "./constants";
 
 const fs = require("fs");
 const path = require("path");
-const npm = require("npm");
 const readline = require("readline-sync");
 const childProcess = require("child_process");
 
