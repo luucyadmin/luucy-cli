@@ -84,7 +84,9 @@ export class Serve {
         });
 
         console.log("starting compiler...");
-        childProcess.spawn("tsc", ["-w"], {
+        const compilerPath = require.resolve("typescript").replace("typescript.js", "tsc.js");
+
+        childProcess.spawn("node", [compilerPath, "-w"], {
             stdout: process.stdout
         });
 

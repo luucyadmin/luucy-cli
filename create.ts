@@ -2,67 +2,69 @@ import { Constants } from "./constants";
 
 const fs = require("fs");
 const path = require("path");
-const childProcess = require("child_process");
+const npm = require("npm");
 const readline = require("readline-sync");
 
 export class Creator {
 	create() {
-		process.stdout.write("welcome to luucy!\n\n");
+		return new Promise<void>(done => {
+			process.stdout.write("welcome to luucy!\n\n");
 
-		const id = Array(64).fill(0).map(() => Math.random().toString(16)[4]).join("");
+			const id = Array(64).fill(0).map(() => Math.random().toString(16)[4]).join("");
 
-		const name = readline.question("Module name (example: Heatwatt Calculator): ");
-		const author = readline.question("Author / Company (example: Heatwatt AG): ");
+			const name = readline.question("Module name (example: Heatwatt Calculator): ");
+			const author = readline.question("Author / Company (example: Heatwatt AG): ");
 
-		console.log("creating project files...");
-		fs.mkdirSync(name);
+			console.log("creating project files...");
+			fs.mkdirSync(name);
 
-		fs.writeFileSync(path.join(name, "tsconfig.json"), `
-{
-	"compilerOptions": {
-		// settings managed by luucy
-		// do not edit
-		"module": "none",
-		"moduleResolution": "classic",
-		"outFile": ${JSON.stringify(Constants.distFile)},
-		"target": "es2018",
-		"noLib": true,
-		"noEmitHelpers": true,
-		"typeRoots": ["node_modules/luucy-types"]
-	},
-	"include": [
-		"plugin.ts",
-		"node_modules"
-	]
-}
-`.trim());
+			fs.writeFileSync(path.join(name, "tsconfig.json"), `
+	{
+		"compilerOptions": {
+			// settings managed by luucy
+			// do not edit
+			"module": "none",
+			"moduleResolution": "classic",
+			"outFile": ${JSON.stringify(Constants.distFile)},
+			"target": "es2018",
+			"noLib": true,
+			"noEmitHelpers": true,
+			"typeRoots": ["node_modules/luucy-types"]
+		},
+		"include": [
+			"plugin.ts",
+			"node_modules"
+		]
+	}
+	`.trim());
 
-		fs.writeFileSync(path.join(name, Constants.packageFile), JSON.stringify({
-			name: id,
-			displayName: name,
-			author: author,
-			version: "1.0.0"
-		}, null, "\t"));
+			fs.writeFileSync(path.join(name, Constants.packageFile), JSON.stringify({
+				name: id,
+				displayName: name,
+				author: author,
+				version: "1.0.0"
+			}, null, "\t"));
 
-		fs.writeFileSync(path.join(name, "plugin.ts"), `
-		
-const section = new ui.Section(${JSON.stringify(name)});
-ui.areas.panel.add(section);
+			fs.writeFileSync(path.join(name, "plugin.ts"), `
+			
+	const section = new ui.Section(${JSON.stringify(name)});
+	ui.areas.panel.add(section);
 
-const helloWorld = new ui.Label("Hello, World!");
-section.add(helloWorld);
+	const helloWorld = new ui.Label("Hello, World!");
+	section.add(helloWorld);
 
-		`.trim());
+			`.trim());
 
-		fs.mkdirSync(path.join(name, Constants.assetsDirectory));
-		fs.writeFileSync(path.join(name, Constants.iconFile), this.getIcon());
+			fs.mkdirSync(path.join(name, Constants.assetsDirectory));
+			fs.writeFileSync(path.join(name, Constants.iconFile), this.getIcon());
 
-		console.log("installing luucy-types...");
-		childProcess.spawnSync("npm", ["install", Constants.typesPackage], {
-			cwd: name
+			console.log("installing luucy-types...");
+			npm.commands.install([Constants.typesPackage], () => {
+				console.log(`\ndone! open ${path.join(process.cwd(), name)} in your editor of choice and use 'luucy serve' to try out your plugin`);
+
+				done();
+			});
 		});
-
-		console.log(`\ndone! open ${path.join(process.cwd(), name)} in your editor of choice and use 'luucy serve' to try out your plugin`);
 	}
 
 	getIcon() {

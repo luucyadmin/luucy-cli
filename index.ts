@@ -29,9 +29,9 @@ process.stdout.write(`   \x1b[2mv${packageConfiguration.version.padEnd(20)}\x1b[
 switch (action) {
     case "create": {
         const creator = new Creator();
-        creator.create();
-
-        process.exit(0);
+        creator.create().then(() => {
+            process.exit(0);
+        });
 
         break;
     }
