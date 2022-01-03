@@ -84,7 +84,7 @@ export class Serve {
         });
 
         console.log("starting compiler...");
-        childProcess.spawn(/^win/.test(process.platform) ? "tsc.cmd" : "tsc", ["-w"], {
+        childProcess.spawn(/^win/.test(process.platform) ? "npx.cmd" : "npx", ["tsc", "-w"], {
             stdout: process.stdout
         });
 
