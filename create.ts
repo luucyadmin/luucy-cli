@@ -46,11 +46,8 @@ export class Creator {
 
 		fs.writeFileSync(path.join(name, "plugin.ts"), `
 		
-const section = new ui.Section(${JSON.stringify(name)});
-ui.areas.panel.add(section);
-
-const helloWorld = new ui.Label("Hello, World!");
-section.add(helloWorld);
+const section = ui.createProjectPanelSection();
+section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
 
 		`.trim());
 
