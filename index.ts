@@ -62,7 +62,7 @@ switch (action) {
 
     case "upgrade": {
         const updater = new Updater();
-        updater.update().then(() => {
+        updater.update(process.argv.includes("--next")).then(() => {
             process.exit(0);
         });
 
@@ -91,7 +91,13 @@ switch (action) {
             },
             {
                 name: "luucy upgrade",
-                purpose: "Upgrades the luucy type mappings"
+                purpose: "Upgrades the luucy type mappings",
+                arguments: [
+                    {
+                        name: "--next",
+                        purpose: "Upgrades to next version, for testing only"
+                    }
+                ]
             }
         ];
 
