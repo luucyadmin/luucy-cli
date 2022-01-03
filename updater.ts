@@ -11,7 +11,7 @@ export class Updater {
         console.log(`current version: '${currentVersion}'`);
 
         console.log("upgrading package...");
-        childProcess.spawnSync("npm", ["install", `${Constants.typesPackage}@latest`]);
+        childProcess.spawnSync(/^win/.test(process.platform) ? "npm.cmd" : "npm", ["install", `${Constants.typesPackage}@latest`]);
 
         const newVersion = this.getTypeVersion();
         console.log(`upgraded from '\x1b[1m${currentVersion}\x1b[11m' -> '\x1b[1m${newVersion}\x1b[11m'`);
