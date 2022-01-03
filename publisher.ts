@@ -14,7 +14,7 @@ export class Publisher {
         const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
 
         console.log(`building '${packageConfiguration.displayName}'...`);
-        const tsc = childProcess.spawnSync(/^win/.test(process.platform) ? "npx.cmd" : "npx", ["tsc"]);
+        const tsc = childProcess.spawnSync("tsc");
 
         if (tsc.status) {
             console.error(`building '${packageConfiguration.displayName}' failed!`);
