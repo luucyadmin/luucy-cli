@@ -31,6 +31,7 @@ export class Creator {
 		"typeRoots": ["node_modules/luucy-types"]
 	},
 	"include": [
+		"**/*.ts",
 		"plugin.ts",
 		"node_modules"
 	]
