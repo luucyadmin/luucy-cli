@@ -19,21 +19,22 @@ export class Creator {
 
 		fs.writeFileSync(path.join(name, "tsconfig.json"), `
 {
+	// settings managed by luucy
+	// do not edit
+	//
 	"compilerOptions": {
-		// settings managed by luucy
-		// do not edit
-		"module": "none",
-		"moduleResolution": "classic",
-		"outFile": ${JSON.stringify(Constants.distFile)},
+		"outFile": "dist.lps",
 		"target": "es2018",
 		"noLib": true,
 		"noEmitHelpers": true,
+		"module": "AMD",
+		"moduleResolution": "classic",
 		"typeRoots": ["node_modules/luucy-types"]
 	},
 	"include": [
 		"**/*.ts",
 		"plugin.ts",
-		"node_modules"
+		"node_modules/luucy-types"
 	]
 }
 `.trim());
