@@ -1,6 +1,6 @@
 {
     "name": "luucy-cli",
-    "version": "4.14.3",
+    "version": "5.0.0",
     "bin": {
         "luucy": "bin/luucy.js"
     },
