@@ -18,13 +18,12 @@ const environments = {
 
 const packageConfiguration = require("../package.json");
 
-process.stdout.write("\x1b[38;5;122m    _____       __\n");
-process.stdout.write("   /    /\\     / /_  ____  _________  __\n");
-process.stdout.write("  /____/  \\   / / / / / / / / ___/ / / /\n");
-process.stdout.write("  \\    \\  /  / / /_/ / /_/ / /__/ /_/ /\n");
-process.stdout.write("   \\____\\/  /_/\\__,_/\\__,_/\\___/\\__, /\n");
-process.stdout.write("                               /____/\n");
-process.stdout.write(`   \x1b[2mv${packageConfiguration.version.padEnd(20)}\x1b[0m\n\n`)
+process.stdout.write("\n\x1b[38;5;122m     · ·        __\n");
+process.stdout.write("   · + + ·     / /_  ____  _________  __\n");
+process.stdout.write("   + \x1b[1m+ +\x1b[22m +    / / / / / / / / ___/ / / /\n");
+process.stdout.write("   + \x1b[1m+ +\x1b[22m +   / / /_/ / /_/ / /__/ /_/ /\n");
+process.stdout.write("   · + + ·  /_/\\__,_/\\__,_/\\___/\\__, /\n");
+process.stdout.write(`     · ·    \x1b[2mv${packageConfiguration.version.padEnd(17)}\x1b[22m /____/\n\n`);
 
 switch (action) {
     case "create": {
