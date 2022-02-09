@@ -1,32 +1,33 @@
-import { Creator } from "./create";
-import { Publisher } from "./publisher";
-import { Serve } from "./serve";
-import { Updater } from "./updater";
+import { Creator } from './create';
+import { Publisher } from './publisher';
+import { Scopes } from './scopes';
+import { Serve } from './serve';
+import { Updater } from './updater';
 
-const childProcess = require("child_process");
-const path = require("path");
-const fs = require("fs");
-const tar = require("tar");
+const childProcess = require('child_process');
+const path = require('path');
+const fs = require('fs');
+const tar = require('tar');
 
-const action = process.argv.reverse().find(arg => arg[0] != "-");
+const action = process.argv.reverse().find(arg => arg[0] != '-');
 
 const environments = {
-    test: "http://localhost:4200",
-    staging: "https://staging.luucy.ch",
-    productive: "https://luucy.ch"
+    test: 'http://localhost:4200',
+    staging: 'https://staging.luucy.ch',
+    productive: 'https://luucy.ch'
 };
 
-const packageConfiguration = require("../package.json");
+const packageConfiguration = require('../package.json');
 
-process.stdout.write("\n\x1b[38;5;122m     · ·        __\n");
-process.stdout.write("   · + + ·     / /_  ____  _________  __\n");
-process.stdout.write("   + \x1b[1m+ +\x1b[22m +    / / / / / / / / ___/ / / /\n");
-process.stdout.write("   + \x1b[1m+ +\x1b[22m +   / / /_/ / /_/ / /__/ /_/ /\n");
-process.stdout.write("   · + + ·  /_/\\__,_/\\__,_/\\___/\\__, /\n");
+process.stdout.write('\n\x1b[38;5;122m     · ·        __\n');
+process.stdout.write('   · + + ·     / /_  ____  _________  __\n');
+process.stdout.write('   + \x1b[1m+ +\x1b[22m +    / / / / / / / / ___/ / / /\n');
+process.stdout.write('   + \x1b[1m+ +\x1b[22m +   / / /_/ / /_/ / /__/ /_/ /\n');
+process.stdout.write('   · + + ·  /_/\\__,_/\\__,_/\\___/\\__, /\n');
 process.stdout.write(`     · ·    \x1b[2mv${packageConfiguration.version.padEnd(17)}\x1b[22m /____/\x1b[0m\n\n`);
 
 switch (action) {
-    case "create": {
+    case 'create': {
         const creator = new Creator();
         creator.create();
         
@@ -35,7 +36,9 @@ switch (action) {
         break;
     }
 
-    case "serve": {
+    case 'serve': {
+        new Scopes().build();
+
         let host = environments.productive;
 
         for (let environment in environments) {
@@ -50,7 +53,7 @@ switch (action) {
         break;
     }
 
-    case "publish": {
+    case 'publish': {
         const publisher = new Publisher();
         publisher.publish().then(() => {
             process.exit(0);
@@ -59,11 +62,33 @@ switch (action) {
         break;
     }
 
-    case "upgrade": {
+    case 'upgrade': {
         const updater = new Updater();
-        updater.update(process.argv.includes("--next")).then(() => {
+        updater.update(process.argv.includes('--next')).then(() => {
             process.exit(0);
         });
+
+        break;
+    }
+
+    case 'scope': {
+        const scopes = new Scopes();
+
+        if (process.argv.includes('--add')) {
+            scopes.add(process.argv[process.argv.indexOf('--add')]);
+        } else if (process.argv.includes('--list')) {
+            process.stdout.write('available scopes:\n');
+
+            for (let item of scopes.list()) {
+                const info = scopes.info(item);
+
+                process.stdout.write(`- '${item}' \x1b[1m${info.name}\x1b[22m ${info.description}\n`);
+            }
+        } else if (process.argv.includes('--build')) {
+            scopes.build();
+        }
+
+        process.exit(0);
 
         break;
     }
@@ -73,28 +98,46 @@ switch (action) {
 
         const options = [
             { 
-                name: "luucy create", 
-                purpose: "Creates an empty plugin locally" 
+                name: 'luucy create', 
+                purpose: 'Creates an empty plugin locally' 
             },
             { 
-                name: "luucy serve", 
-                purpose: "Debug plugin locally",
+                name: 'luucy serve', 
+                purpose: 'Debug plugin locally',
                 arguments: Object.keys(environments).map(environment => ({
                     name: `--${environment}`,
                     purpose: `Launch debugger for ${environments[environment]} (${environment} environment)`
                 }))
             },
             { 
-                name: "luucy publish", 
-                purpose: "Publish a plugin to the luucy marketplace" 
+                name: 'luucy publish', 
+                purpose: 'Publish a plugin to the luucy marketplace' 
             },
             {
-                name: "luucy upgrade",
-                purpose: "Upgrades the luucy type mappings",
+                name: 'luucy upgrade',
+                purpose: 'Upgrades the luucy type mappings',
                 arguments: [
                     {
-                        name: "--next",
-                        purpose: "Upgrades to next version, for testing only"
+                        name: '--next',
+                        purpose: 'Upgrades to next version, for testing only'
+                    }
+                ]
+            },
+            {
+                name: 'luucy scope',
+                purpose: 'Manage luucy scopes',
+                arguments: [
+                    {
+                        name: '--add',
+                        purpose: 'Enables a new scopes'
+                    },
+                    {
+                        name: '--list',
+                        purpose: 'Lists all available scopes'
+                    },
+                    {
+                        name: '--build',
+                        purpose: 'Rebuilds definitions'
                     }
                 ]
             }
