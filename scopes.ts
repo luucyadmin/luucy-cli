@@ -34,7 +34,7 @@ export class Scopes {
     }
 
     list() {
-        return fs.listDirSync(this.root) as string[];
+        return fs.readdirSync(this.root) as string[];
     }
 
     info(name: string) {
