@@ -9,10 +9,10 @@ export class Creator {
 	create() {
 		process.stdout.write("welcome to luucy!\n\n");
 
-		const id = Array(64).fill(0).map(() => Math.random().toString(16)[4]).join("");
-
 		const name = readline.question("Module name (example: Heatwatt Calculator): ");
 		const author = readline.question("Author / Company (example: Heatwatt AG): ");
+
+		const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^\-+/, '').replace(/\-+$/, '') || 'plugin';
 
 		console.log("creating project files...");
 		fs.mkdirSync(name);
