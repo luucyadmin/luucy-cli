@@ -34,13 +34,13 @@ export class Scopes {
     }
 
     list() {
-        return fs.readdirSync(this.root) as string[];
+        return fs.readdirSync(this.scopes) as string[];
     }
 
     info(name: string) {
         for (let scope of this.list()) {
             if (scope == name) {
-                return JSON.parse(fs.readFileSync('scope.json').toString());
+                return JSON.parse(fs.readFileSync(path.join(this.scopes, name, 'scope.json')).toString());
             }
         }
     }
