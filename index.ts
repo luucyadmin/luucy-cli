@@ -14,14 +14,12 @@ const tar = require('tar');
 const parameters = process.argv.slice(process.argv.findIndex(arg => arg.includes('luucy')) + 1);
 const packageConfiguration = require('../package.json');
 
-console.log(parameters)
-
-/* process.stdout.write('\n\x1b[38;5;122m     · ·        __\n');
+process.stdout.write('\n\x1b[38;5;122m     · ·        __\n');
 process.stdout.write('   · + + ·     / /_  ____  _________  __\n');
 process.stdout.write('   + \x1b[1m+ +\x1b[22m +    / / / / / / / / ___/ / / /\n');
 process.stdout.write('   + \x1b[1m+ +\x1b[22m +   / / /_/ / /_/ / /__/ /_/ /\n');
 process.stdout.write('   · + + ·  /_/\\__,_/\\__,_/\\___/\\__, /\n');
-process.stdout.write(`     · ·    \x1b[2mv${packageConfiguration.version.padEnd(17)}\x1b[22m /____/\x1b[0m\n\n`); */
+process.stdout.write(`     · ·    \x1b[2mv${packageConfiguration.version.padEnd(17)}\x1b[22m /____/\x1b[0m\n\n`);
 
 switch (parameters.shift()) {
     case 'create': {
