@@ -17,6 +17,7 @@
         "express-ws": "^5.0.2",
         "readline-sync": "^1.4.10",
         "tar": "^6.1.11",
+        "tsc-watch": "^4.6.0",
         "typescript": "^4.5.4"
     }
 }

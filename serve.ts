@@ -85,12 +85,19 @@ export class Serve {
 
         console.log('starting compiler...');
 
-        const compiler = childProcess.spawn(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['tsc', '-w'], {
-            stdio: 'pipe'
-        });
+        const successToken = Array(64).fill(0).map(() => Math.random().toString(16)[3]);
+        const failiureToken = Array(64).fill(0).map(() => Math.random().toString(16)[3]);
 
-        compiler.stderr.on('data', data => {
-            process.stderr.write(data);
+        const compiler = childProcess.spawn(
+            /^win/.test(process.platform) ? 'npx.cmd' : 'npx', 
+            ['tsc-watch', '--onSuccess', `echo ${successToken}`, '--onFailure', `echo ${failiureToken}`, '--noClear', '--noColors'], 
+            {
+                stdio: 'pipe'
+            }
+        );
+
+        compiler.stdout.on('data', data => {
+            process.stdout.write(data);
         });
 
         console.log('starting server...');
