@@ -39,7 +39,7 @@ export class Scopes {
         for (let dependency of info.dependencies || []) {
             process.stdout.write(`\x1b[2m→ installing dependency '${dependency}' of '${name}'\x1b[0m\n`);
 
-            this.addScope(packageConfiguration, name);
+            this.addScope(packageConfiguration, dependency);
         }
 
         if (packageConfiguration.scopes) {
