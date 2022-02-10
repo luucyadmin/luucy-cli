@@ -1,4 +1,6 @@
+import { Constants } from './constants';
 import { Creator } from './create';
+import { printHelp } from './help';
 import { Publisher } from './publisher';
 import { Scopes } from './scopes';
 import { Serve } from './serve';
@@ -9,14 +11,7 @@ const path = require('path');
 const fs = require('fs');
 const tar = require('tar');
 
-const action = process.argv.reverse().find(arg => arg[0] != '-');
-
-const environments = {
-    test: 'http://localhost:4200',
-    staging: 'https://staging.luucy.ch',
-    productive: 'https://luucy.ch'
-};
-
+const parameters = process.argv.slice(process.argv.findIndex(arg => arg.endsWith('luucy.js')) + 1);
 const packageConfiguration = require('../package.json');
 
 process.stdout.write('\n\x1b[38;5;122m     · ·        __\n');
@@ -26,7 +21,7 @@ process.stdout.write('   + \x1b[1m+ +\x1b[22m +   / / /_/ / /_/ / /__/ /_/ /\n')
 process.stdout.write('   · + + ·  /_/\\__,_/\\__,_/\\___/\\__, /\n');
 process.stdout.write(`     · ·    \x1b[2mv${packageConfiguration.version.padEnd(17)}\x1b[22m /____/\x1b[0m\n\n`);
 
-switch (action) {
+switch (parameters.shift()) {
     case 'create': {
         const creator = new Creator();
         creator.create();
@@ -39,11 +34,11 @@ switch (action) {
     case 'serve': {
         new Scopes().build();
 
-        let host = environments.productive;
+        let host = Constants.environments.productive;
 
-        for (let environment in environments) {
+        for (let environment in Constants.environments) {
             if (process.argv.includes(`--${environment}`)) {
-                host = environments[environment];
+                host = Constants.environments[environment];
             }
         }
 
@@ -74,93 +69,50 @@ switch (action) {
     case 'scope': {
         const scopes = new Scopes();
 
-        if (process.argv.includes('--add')) {
-            scopes.add(process.argv[process.argv.indexOf('--add')]);
-        } else if (process.argv.includes('--list')) {
-            process.stdout.write('available scopes:\n');
+        switch (parameters.shift()) {
+            case 'add': {
+                scopes.add(parameters.shift());
 
-            for (let item of scopes.list()) {
-                const info = scopes.info(item);
-
-                process.stdout.write(`- '${item}' \x1b[1m${info.name}\x1b[22m ${info.description}\n`);
+                break;
             }
-        } else if (process.argv.includes('--build')) {
-            scopes.build();
+
+            case 'list': {
+                process.stdout.write('available scopes:\n');
+
+                for (let item of scopes.list()) {
+                    const info = scopes.info(item);
+
+                    process.stdout.write(`- '${item}' \x1b[1m${info.name}\x1b[22m ${info.description}\n`);
+                }
+
+                break;
+            }
+
+            case 'build': {
+                scopes.build();
+
+                break;
+            }
+
+            default: {
+                printHelp();
+
+                process.exit(1);
+            }
         }
 
         process.exit(0);
+    }
 
-        break;
+    case 'help': {
+        printHelp();
+
+        process.exit(0);
     }
 
     default: {
-        process.stdout.write(`luucy cli v${packageConfiguration.version}\n\n`);
+        printHelp();
 
-        const options = [
-            { 
-                name: 'luucy create', 
-                purpose: 'Creates an empty plugin locally' 
-            },
-            { 
-                name: 'luucy serve', 
-                purpose: 'Debug plugin locally',
-                arguments: Object.keys(environments).map(environment => ({
-                    name: `--${environment}`,
-                    purpose: `Launch debugger for ${environments[environment]} (${environment} environment)`
-                }))
-            },
-            { 
-                name: 'luucy publish', 
-                purpose: 'Publish a plugin to the luucy marketplace' 
-            },
-            {
-                name: 'luucy upgrade',
-                purpose: 'Upgrades the luucy type mappings',
-                arguments: [
-                    {
-                        name: '--next',
-                        purpose: 'Upgrades to next version, for testing only'
-                    }
-                ]
-            },
-            {
-                name: 'luucy scope',
-                purpose: 'Manage luucy scopes',
-                arguments: [
-                    {
-                        name: '--add',
-                        purpose: 'Enables a new scopes'
-                    },
-                    {
-                        name: '--list',
-                        purpose: 'Lists all available scopes'
-                    },
-                    {
-                        name: '--build',
-                        purpose: 'Rebuilds definitions'
-                    }
-                ]
-            }
-        ];
-
-        let longest = 0;
-
-        for (let option of options) {
-            longest = Math.max(longest, option.name.length);
-
-            for (let argument of option.arguments || []) {
-                longest = Math.max(longest, argument.name.length + 4);
-            }
-        }
-
-        longest += 3;
-
-        for (let option of options) {
-            process.stdout.write(`${option.name.padEnd(longest)}${option.purpose}\n`);
-
-            for (let argument of option.arguments || []) {
-                process.stdout.write(`    ${argument.name.padEnd(longest - 4)}${argument.purpose}\n`);
-            }
-        }
-    }    
+        process.exit(1);
+    }
 }
