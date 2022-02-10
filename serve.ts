@@ -85,19 +85,17 @@ export class Serve {
 
         console.log('starting compiler...');
 
-        const successToken = Array(64).fill(0).map(() => Math.random().toString(16)[3]);
-        const failiureToken = Array(64).fill(0).map(() => Math.random().toString(16)[3]);
-
-        const compiler = childProcess.spawn(
-            /^win/.test(process.platform) ? 'npx.cmd' : 'npx', 
-            ['tsc-watch', '--onSuccess', `echo ${successToken}`, '--onFailure', `echo ${failiureToken}`, '--noClear', '--noColors'], 
-            {
-                stdio: 'pipe'
-            }
-        );
+        const compiler = childProcess.spawn(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', [
+            'tsc', '--watch', '--locale',  'en-us'
+        ], {
+            stdio: 'pipe'
+        });
 
         compiler.stdout.on('data', data => {
-            process.stdout.write(data);
+            process.stdout.write(data
+                .replace(/(0-90-9:?){3}\s+-\s+(Starting compilation in watch mode|File change detected. Starting incremental compilation)\.\.\./g, '')
+                .replace(/(0-90-9:?){3}\s+-\s+Found (0-9)+ errors. Watching for file changes\./g, '')
+            );
         });
 
         console.log('starting server...');
