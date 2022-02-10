@@ -92,12 +92,12 @@ export class Serve {
         });
 
         compiler.stdout.on('data', data => {
-            process.stdout.write(data
+            process.stdout.write(`\x1b[3;31m${data
                 .toString()
                 .replace(/([0-9][0-9]:?){3}\s+-\s+((Starting compilation in watch mode)|(File change detected. Starting incremental compilation))\.\.\./g, '')
                 .replace(/([0-9][0-9]:?){3}\s+-\s+Found [0-9]+ errors. Watching for file changes\./g, '')
                 .replace(/\x1bc/g, '')
-            );
+            }\x1b[0m`);
         });
 
         console.log('starting server...');
