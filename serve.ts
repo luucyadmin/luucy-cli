@@ -89,10 +89,6 @@ export class Serve {
             stdio: 'pipe'
         });
 
-        compiler.stdout.on('data', data => {
-            process.stdout.write(data);
-        });
-
         compiler.stderr.on('data', data => {
             process.stderr.write(data);
         });
