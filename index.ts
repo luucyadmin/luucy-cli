@@ -11,7 +11,7 @@ const path = require('path');
 const fs = require('fs');
 const tar = require('tar');
 
-const parameters = process.argv.slice(process.argv.findIndex(arg => arg.endsWith('luucy.js')) + 1);
+const parameters = process.argv.slice(process.argv.findIndex(arg => arg.includes('luucy')) + 1);
 const packageConfiguration = require('../package.json');
 
 console.log(parameters)
