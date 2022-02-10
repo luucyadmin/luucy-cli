@@ -1,10 +1,10 @@
-import { Constants } from "./constants";
+import { Constants } from './constants';
 
-const express = require("express");
-const childProcess = require("child_process");
-const ws = require("express-ws");
-const fs = require("fs");
-const path = require("path");
+const express = require('express');
+const childProcess = require('child_process');
+const ws = require('express-ws');
+const fs = require('fs');
+const path = require('path');
 
 export class Serve {
     constructor(
@@ -12,7 +12,7 @@ export class Serve {
     ) {}
 
     start() {
-        console.log("creating server...");
+        console.log('creating server...');
         const app = express();
         ws(app);
 
@@ -23,12 +23,12 @@ export class Serve {
         console.log(`reading ${Constants.packageFile}...`);
         let packageConfiguration = readPackageConfiguration();
 
-        const assetsPath = path.join(process.cwd(), "assets");
+        const assetsPath = path.join(process.cwd(), 'assets');
 
         console.log(`serving assets from '${assetsPath}'...`);
-        app.use("/assets", express.static(assetsPath));
+        app.use('/assets', express.static(assetsPath));
 
-        app.ws("/socket", socket => {
+        app.ws('/socket', socket => {
             process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] sending plugin...\x1b[0m\n`);
 
             let source;
@@ -58,7 +58,7 @@ export class Serve {
             fs.watch(Constants.distFile, () => update());
             fs.watch(Constants.packageFile, () => update());
             
-            socket.on("message", data => {
+            socket.on('message', data => {
                 const message = JSON.parse(data);
 
                 if (message.installed) {
@@ -68,28 +68,36 @@ export class Serve {
                 } else if (message.log) {
                     console.log(`\x1b[3m[${packageConfiguration.displayName}]\x1b[0m`, ...message.log);
                 } else if (message.warn) {
-                    console.warn(`\x1b[3;33m[${packageConfiguration.displayName}]\x1b[0;33m`, ...message.warn, "\x1b[0m");
+                    console.warn(`\x1b[3;33m[${packageConfiguration.displayName}]\x1b[0;33m`, ...message.warn, '\x1b[0m');
                 } else if (message.error) {
-                    console.error(`\x1b[3;31m[${packageConfiguration.displayName}]\x1b[1;31m`, ...message.error, "\x1b[0m");
+                    console.error(`\x1b[3;31m[${packageConfiguration.displayName}]\x1b[1;31m`, ...message.error, '\x1b[0m');
                 } else {
-                    console.log("Unknown message", message);
+                    console.log('Unknown message', message);
                 }
             });
 
-            socket.on("close", () => {
-                console.warn("debugger detached!");
+            socket.on('close', () => {
+                console.warn('debugger detached!');
 
                 this.printOpenLinkMessage(packageConfiguration, server);
             });
         });
 
-        console.log("starting compiler...");
-        childProcess.spawn(/^win/.test(process.platform) ? "npx.cmd" : "npx", ["tsc", "-w"], {
-            stdout: process.stdout,
-            stderr: process.stderr
+        console.log('starting compiler...');
+
+        const compiler = childProcess.spawn(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['tsc', '-w'], {
+            stdio: 'pipe'
         });
 
-        console.log("starting server...");
+        compiler.stdout.on('data', data => {
+            process.stdout.write(data);
+        });
+
+        compiler.stderr.on('data', data => {
+            process.stderr.write(data);
+        });
+
+        console.log('starting server...');
         
         const server = app.listen(0, () => {
             this.printOpenLinkMessage(packageConfiguration, server);
