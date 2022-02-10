@@ -96,6 +96,8 @@ export class Serve {
                 .toString()
                 .replace(/([0-9][0-9]:?){3}\s+-\s+((Starting compilation in watch mode)|(File change detected. Starting incremental compilation))\.\.\./g, '')
                 .replace(/([0-9][0-9]:?){3}\s+-\s+Found (0-9)+ errors. Watching for file changes\./g, '')
+
+                + '*****'
             );
         });
 
