@@ -20,7 +20,7 @@ export class Scopes {
 
         this.build();
 
-        process.stdout.write(`${name} installed successfuly\n`);
+        process.stdout.write(`\nscope '${name}' added successfuly\n\n`);
 
         return true;
     }
@@ -29,7 +29,7 @@ export class Scopes {
         const info = this.info(name);
 
         if (info.permission) {
-            process.stdout.write(`${name}: \x1b[3;33m${info.permission}\x1b[22m\n`);
+            process.stdout.write(`${name}: \x1b[3;33m${info.permission}\x1b[0m\n`);
 
             if (!readline.keyInYN('Do you really want to add this scope?')) {
                 process.exit(2);
