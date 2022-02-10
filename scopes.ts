@@ -2,6 +2,7 @@ import { Constants } from "./constants";
 
 const path = require('path');
 const fs = require('fs');
+const readline = require("readline-sync");
 
 export class Scopes {
     add(name: string) {
@@ -11,6 +12,34 @@ export class Scopes {
 
         const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
         
+        this.addScope(packageConfiguration, name);
+
+        packageConfiguration.scopes = packageConfiguration.scopes.sort((a, b) => a > b);
+
+        fs.writeFileSync(Constants.packageFile, JSON.stringify(packageConfiguration, null, '\t'));
+
+        this.build();
+
+        return true;
+    }
+
+    private addScope(packageConfiguration, name: string) {
+        const info = this.info(name);
+
+        if (info.permission) {
+            process.stdout.write(`${name}: \x1b[3;33m${info.permission}\x1b[22m\n`);
+
+            if (!readline.keyInYN('Do you really want to add this scope?')) {
+                process.exit(2);
+            }
+        }
+
+        for (let dependency of info.dependencies || []) {
+            process.stdout.write(`\x1b[2m→ installing dependency '${dependency}' of '${name}'\x1b[0m\n`);
+
+            this.addScope(packageConfiguration, name);
+        }
+
         if (packageConfiguration.scopes) {
             if (packageConfiguration.scopes.includes(name)) {
                 return false;
@@ -20,14 +49,6 @@ export class Scopes {
         } else {
             packageConfiguration.scopes = [name];
         }
-
-        packageConfiguration.scopes = packageConfiguration.scopes.sort((a, b) => a > b);
-
-        fs.writeFileSync(Constants.packageFile, JSON.stringify(packageConfiguration, null, '\t'));
-
-        this.build();
-
-        return true;
     }
 
     list() {

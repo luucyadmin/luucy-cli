@@ -33,7 +33,7 @@ export function printHelp() {
             purpose: 'Manage luucy scopes',
             arguments: [
                 {
-                    name: 'add',
+                    name: 'add {scope}',
                     purpose: 'Adds a new scope'
                 },
                 {
@@ -43,6 +43,16 @@ export function printHelp() {
                 {
                     name: 'build',
                     purpose: 'Rebuilds definitions'
+                }
+            ]
+        },
+        {
+            name: 'luucy add',
+            purpose: 'Add a new scope (shorthand for luucy scope add)',
+            arguments: [
+                {
+                    name: '{scope}',
+                    purpose: 'Scope name. Use luucy scope list to view all available scopes'
                 }
             ]
         },

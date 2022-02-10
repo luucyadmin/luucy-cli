@@ -66,6 +66,12 @@ switch (parameters.shift()) {
         break;
     }
 
+    case 'add': {
+        new Scopes().add(parameters.shift());
+
+        process.exit(0);
+    }
+
     case 'scope': {
         const scopes = new Scopes();
 
@@ -82,7 +88,13 @@ switch (parameters.shift()) {
                 for (let item of scopes.list()) {
                     const info = scopes.info(item);
 
-                    process.stdout.write(`- '${item}' \x1b[1m${info.name}\x1b[22m ${info.description}\n`);
+                    process.stdout.write(`- '${item}' \x1b[1m${info.name}\x1b[22m ${info.description} `);
+
+                    if (info.permission) {
+                        process.stdout.write('\x1b[2m⚠ requires special permissions\x1b[22m');
+                    }
+
+                    process.stdout.write('\n');
                 }
 
                 break;
