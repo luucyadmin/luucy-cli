@@ -20,6 +20,8 @@ export class Scopes {
 
         this.build();
 
+        process.stdout.write(`${name} installed successfuly\n`);
+
         return true;
     }
 
