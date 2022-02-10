@@ -29,12 +29,12 @@ export class Creator {
 		"noEmitHelpers": true,
 		"module": "AMD",
 		"moduleResolution": "classic",
-		"typeRoots": ["node_modules/luucy-types"]
+		"typeRoots": [ ".luucy" ]
 	},
 	"include": [
 		"**/*.ts",
 		"plugin.ts",
-		"node_modules/luucy-types"
+		".luucy/types.d.ts"
 	]
 }
 `.trim());
