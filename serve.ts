@@ -154,7 +154,7 @@ export class Serve {
                     output = '';
                     compileBannerShown = false;
                 } else if (!compileBannerShown) {
-                    process.stdout.write(`\x1b[2compiling '${packageConfiguration.displayName}'...\x1b[0m\n`);
+                    process.stdout.write(`\x1b[2mcompiling '${packageConfiguration.displayName}'...\x1b[0m`);
 
                     compileBannerShown = true;
                 }
