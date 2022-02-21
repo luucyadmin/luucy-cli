@@ -1,4 +1,5 @@
 import { Constants } from './constants';
+import { Scopes } from './scopes';
 
 const express = require('express');
 const childProcess = require('child_process');
@@ -14,6 +15,8 @@ export class Serve {
     compileStartRegex = /([0-9][0-9]:?){3}\s+-\s+((Starting compilation in watch mode)|(File change detected. Starting incremental compilation))\.\.\./g;
     compileEndRegex = /([0-9][0-9]:?){3}\s+-\s+Found [0-9]+ errors?. Watching for file changes\./g;
 
+    scopeNotFoundRegex = /error TS2304: Cannot find name '([a-zA-Z]+)'\./g;
+    complexScopeNotFoundRegex = /error TS2339: Property '([a-zA-Z]+)' does not exist on type 'typeof ([a-zA-Z]+)'\./g;
 
     start() {
         console.log('creating server...');
@@ -96,6 +99,7 @@ export class Serve {
         });
 
         let output = '';
+        const scopes = new Scopes().list();
 
         compiler.stdout.on('data', data => {
             output += data.toString();
@@ -114,6 +118,32 @@ export class Serve {
                 if (output) {
                     process.stdout.write(`\x1b[3;31m\x1b[1mFailed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
                     process.stdout.write(`\x1b[3;31m${output}\x1b[0m\n\n`);
+
+                    const missingScopeMatches = [
+                        ...output.match(this.scopeNotFoundRegex) || [],
+                        ...output.match(this.complexScopeNotFoundRegex) || []
+                    ];
+
+                    const missingScopes = [];
+
+                    for (let error of missingScopeMatches) {
+                        const properties = error.match(/'(typeof\s+)?([a-zA-Z]+)'/g).map(s => s.replace(/'(typeof\s+)?/g, ''));
+                        const path = properties.reverse().join('.');
+
+                        for (let scope of scopes) {
+                            if (scope == path && !scopes.includes(path)) {
+                                missingScopes.push(path);
+                            }
+                        }
+                    }
+
+                    if (missingScopes.length) {
+                        for (let scope of missingScopes) {
+                            process.stdout.write(`\x1b[3;31m → '${scope}' scope may be missing, use 'luucy add ${scope}' to add the scope.\x1b[0m\n`);
+                        }
+
+                        process.stdout.write('\n');
+                    }
                 }
 
                 output = '';
