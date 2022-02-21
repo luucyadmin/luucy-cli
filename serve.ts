@@ -99,7 +99,7 @@ export class Serve {
         });
 
         let output = '';
-        let compileBannerShown = false;
+        let compilerStartedAt;
 
         const scopes = new Scopes().list();
 
@@ -119,7 +119,7 @@ export class Serve {
                     output = output.trim();
 
                     if (output) {
-                        process.stdout.write(`\x1b[3;31m\x1b[1mFailed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
+                        process.stdout.write(`\x1b[3;31m\x1b[1m\x1b[2m\x1b[2K\r[${new Date().toLocaleTimeString()}] failed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
                         process.stdout.write(`${output}\n\n`);
 
                         const missingScopeMatches = [
@@ -148,15 +148,15 @@ export class Serve {
                             process.stdout.write('\n');
                         }
                     } else {
-                        process.stdout.write(`\x1b[2m\x1b[2K\rsuccessfully compiled '${packageConfiguration.displayName}'\x1b[0m\n`);
+                        process.stdout.write(`\x1b[2m\x1b[2K\r[${new Date().toLocaleTimeString()}] successfully compiled '${packageConfiguration.displayName}' (${+new Date() - compilerStartedAt}ms)\x1b[0m\n`);
                     }
 
                     output = '';
-                    compileBannerShown = false;
-                } else if (!compileBannerShown) {
-                    process.stdout.write(`\x1b[2mcompiling '${packageConfiguration.displayName}'...\x1b[0m`);
+                    compilerStartedAt = null;
+                } else if (!compilerStartedAt) {
+                    process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}]compiling '${packageConfiguration.displayName}'...\x1b[0m`);
 
-                    compileBannerShown = true;
+                    compilerStartedAt = new Date();
                 }
             }
         });
