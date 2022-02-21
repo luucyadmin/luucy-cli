@@ -119,7 +119,7 @@ export class Serve {
                     output = output.trim();
 
                     if (output) {
-                        process.stdout.write(`\x1b[3;31m\x1b[1m\x1b[2m\x1b[2K\r[${new Date().toLocaleTimeString()}] failed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
+                        process.stdout.write(`\x1b[3;31m\x1b[1m\x1b[2K\r[${new Date().toLocaleTimeString()}] failed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
                         process.stdout.write(`${output}\n\n`);
 
                         const missingScopeMatches = [
