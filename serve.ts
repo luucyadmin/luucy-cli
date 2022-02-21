@@ -11,6 +11,10 @@ export class Serve {
         private host: string
     ) {}
 
+    compileStartRegex = /([0-9][0-9]:?){3}\s+-\s+((Starting compilation in watch mode)|(File change detected. Starting incremental compilation))\.\.\./g;
+    compileEndRegex = /([0-9][0-9]:?){3}\s+-\s+Found [0-9]+ errors?. Watching for file changes\./g;
+
+
     start() {
         console.log('creating server...');
         const app = express();
@@ -91,13 +95,31 @@ export class Serve {
             stdio: 'pipe'
         });
 
+        let output = '';
+
         compiler.stdout.on('data', data => {
-            process.stdout.write(`\x1b[3;31m${data
-                .toString()
-                .replace(/([0-9][0-9]:?){3}\s+-\s+((Starting compilation in watch mode)|(File change detected. Starting incremental compilation))\.\.\./g, '')
-                .replace(/([0-9][0-9]:?){3}\s+-\s+Found [0-9]+ errors?. Watching for file changes\./g, '')
-                .replace(/\x1bc/g, '')
-            }\x1b[0m`);
+            output += data.toString();
+
+            if (output.match(this.compileStartRegex) && output.match(this.compileEndRegex)) {
+                // only remove first error list
+                const outputs = output.split(this.compileEndRegex);
+                let errors = outputs.shift();
+
+                output = outputs.join('');
+
+                // remove start regex
+                errors = errors.replace(this.compileStartRegex, '');
+
+                // remove clear screen
+                errors = errors.replace(/\x1bc/g, '');
+
+                // remove whitespace
+                errors = errors.trim();
+
+                if (errors) {
+                    process.stdout.write(`\x1b[3;31m${errors}\x1b[0m`);
+                }
+            }
         });
 
         console.log('starting server...');
