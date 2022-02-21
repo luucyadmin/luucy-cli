@@ -99,54 +99,65 @@ export class Serve {
         });
 
         let output = '';
+        let compileBannerShown = false;
+
         const scopes = new Scopes().list();
 
         compiler.stdout.on('data', data => {
             output += data.toString();
 
-            if (output.match(this.compileStartRegex) && output.match(this.compileEndRegex)) {
-                // remove ts markers
-                output = output.replace(this.compileStartRegex, '');
-                output = output.replace(this.compileEndRegex, '');
+            if (output.match(this.compileStartRegex)) {
+                if (output.match(this.compileEndRegex)) {
+                    // remove ts markers
+                    output = output.replace(this.compileStartRegex, '');
+                    output = output.replace(this.compileEndRegex, '');
 
-                // remove clear screen
-                output = output.replace(/\x1bc/g, '');
+                    // remove clear screen
+                    output = output.replace(/\x1bc/g, '');
 
-                // remove whitespace
-                output = output.trim();
+                    // remove whitespace
+                    output = output.trim();
 
-                if (output) {
-                    process.stdout.write(`\x1b[3;31m\x1b[1mFailed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
-                    process.stdout.write(`${output}\n\n`);
+                    if (output) {
+                        process.stdout.write(`\x1b[3;31m\x1b[1mFailed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
+                        process.stdout.write(`${output}\n\n`);
 
-                    const missingScopeMatches = [
-                        ...output.match(this.scopeNotFoundRegex) || [],
-                        ...output.match(this.complexScopeNotFoundRegex) || []
-                    ];
+                        const missingScopeMatches = [
+                            ...output.match(this.scopeNotFoundRegex) || [],
+                            ...output.match(this.complexScopeNotFoundRegex) || []
+                        ];
 
-                    const missingScopes = [];
+                        const missingScopes = [];
 
-                    for (let error of missingScopeMatches) {
-                        const properties = error.match(/'(typeof\s+)?([a-zA-Z]+)'/g).map(s => s.replace(/'(typeof\s+)?/g, ''));
-                        const path = properties.reverse().join('.');
+                        for (let error of missingScopeMatches) {
+                            const properties = error.match(/'(typeof\s+)?([a-zA-Z]+)'/g).map(s => s.replace(/'(typeof\s+)?/g, ''));
+                            const path = properties.reverse().join('.');
 
-                        for (let scope of scopes) {
-                            if (scope == path && !missingScopes.includes(path)) {
-                                missingScopes.push(path);
+                            for (let scope of scopes) {
+                                if (scope == path && !missingScopes.includes(path)) {
+                                    missingScopes.push(path);
+                                }
                             }
                         }
-                    }
 
-                    if (missingScopes.length) {
-                        for (let scope of missingScopes) {
-                            process.stdout.write(` → '${scope}' scope may be missing, use 'luucy add ${scope}' to add the scope.\n`);
+                        if (missingScopes.length) {
+                            for (let scope of missingScopes) {
+                                process.stdout.write(` → '${scope}' scope may be missing, use 'luucy add ${scope}' to add the scope.\n`);
+                            }
+
+                            process.stdout.write('\n');
                         }
-
-                        process.stdout.write('\n');
+                    } else {
+                        process.stdout.write(`\x1b[2m\x1b[2K\rsuccessfully compiled '${packageConfiguration.displayName}'\x1b[0m\n`);
                     }
-                }
 
-                output = '';
+                    output = '';
+                    compileBannerShown = false;
+                } else if (!compileBannerShown) {
+                    process.stdout.write(`\x1b[2compiling '${packageConfiguration.displayName}'...\x1b[0m\n`);
+
+                    compileBannerShown = true;
+                }
             }
         });
 
