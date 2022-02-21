@@ -71,7 +71,7 @@ export class Serve {
                     console.warn(`\x1b[3;33m[${packageConfiguration.displayName}]\x1b[0;33m`, ...message.warn, '\x1b[0m');
                 } else if (message.error) {
                     console.error(`\x1b[3;31m[${packageConfiguration.displayName}]\x1b[1;31m`, ...message.error, '\x1b[0m');
-                } else {
+                } else if (!message.ping) {
                     console.log('Unknown message', message);
                 }
             });
