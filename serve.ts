@@ -36,7 +36,7 @@ export class Serve {
         app.use('/assets', express.static(assetsPath));
 
         app.ws('/socket', socket => {
-            process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] sending plugin...\x1b[0m\n`);
+            process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] connected to ${this.host}! sending plugin...\x1b[0m\n`);
 
             let source;
             
