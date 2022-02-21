@@ -36,7 +36,7 @@ export class Serve {
         app.use('/assets', express.static(assetsPath));
 
         app.ws('/socket', socket => {
-            process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] sending plugin...\x1b[0m\n`);
+            process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] sending plugin...\x1b[0m\n`);
 
             let source;
             
@@ -52,7 +52,7 @@ export class Serve {
                     const updatedPackageConfiguration = readPackageConfiguration();
 
                     if (updatedSource != source || JSON.stringify(packageConfiguration) != JSON.stringify(updatedPackageConfiguration)) {
-                        process.stdout.write(`\x1b[2J\x1b[2m[${new Date().toLocaleTimeString()}] updating ${packageConfiguration.displayName}...\x1b[0m\n`);
+                        process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] updating ${packageConfiguration.displayName}...\x1b[0m\n`);
 
                         source = updatedSource;
                         packageConfiguration = updatedPackageConfiguration;
