@@ -112,7 +112,8 @@ export class Serve {
                 output = output.trim();
 
                 if (output) {
-                    process.stdout.write(`\x1b[3;31m${output}\x1b[0m\n`);
+                    process.stdout.write(`\x1b[3;31m\x1b[1mFailed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
+                    process.stdout.write(`\x1b[3;31m${output}\x1b[0m\n\n`);
                 }
 
                 output = '';
