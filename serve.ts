@@ -119,7 +119,7 @@ export class Serve {
                     output = output.trim();
 
                     if (output) {
-                        process.stdout.write(`\x1b[3;31m\x1b[1m\x1b[2K\r[${new Date().toLocaleTimeString()}] failed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
+                        process.stdout.write(`\n\x1b[3;31m\x1b[1m[${new Date().toLocaleTimeString()}] failed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
                         process.stdout.write(`${output}\n\n`);
 
                         const missingScopeMatches = [
@@ -169,7 +169,7 @@ export class Serve {
     }
 
     printOpenLinkMessage(packageConfiguration, server) {
-        console.log(`\nopen the following link to try out '${packageConfiguration.displayName}'\n\x1b[1m\x1b[4m${this.host}/workspaces#${packageConfiguration.name}:${server.address().port}\x1b[0m`);
+        console.log(`\nopen the following link to try out '${packageConfiguration.displayName}'\n\x1b[1m\x1b[4m${this.host}/workspaces#${packageConfiguration.name}:${server.address().port}\x1b[0m\n\n`);
     }
 
     bundle(source: string, packageConfiguration) {
