@@ -130,7 +130,7 @@ export class Serve {
                         const properties = error.match(/'(typeof\s+)?([a-zA-Z]+)'/g).map(s => s.replace(/'(typeof\s+)?/g, ''));
                         const path = properties.reverse().join('.');
 
-                        console.log(path);
+                        console.log(path, scopes);
 
                         for (let scope of scopes) {
                             if (scope == path && !scopes.includes(path)) {
