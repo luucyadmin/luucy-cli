@@ -117,7 +117,7 @@ export class Serve {
 
                 if (output) {
                     process.stdout.write(`\x1b[3;31m\x1b[1mFailed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
-                    process.stdout.write(`\x1b[3;31m${output}\x1b[0m\n\n`);
+                    process.stdout.write(`${output}\n\n`);
 
                     const missingScopeMatches = [
                         ...output.match(this.scopeNotFoundRegex) || [],
@@ -139,7 +139,7 @@ export class Serve {
 
                     if (missingScopes.length) {
                         for (let scope of missingScopes) {
-                            process.stdout.write(`\x1b[3;31m → '${scope}' scope may be missing, use 'luucy add ${scope}' to add the scope.\x1b[0m\n`);
+                            process.stdout.write(` → '${scope}' scope may be missing, use 'luucy add ${scope}' to add the scope.\n`);
                         }
 
                         process.stdout.write('\n');
