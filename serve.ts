@@ -101,24 +101,21 @@ export class Serve {
             output += data.toString();
 
             if (output.match(this.compileStartRegex) && output.match(this.compileEndRegex)) {
-                // only remove first error list
-                const outputs = output.split(this.compileEndRegex);
-                let errors = outputs.shift();
-
-                output = outputs.join('');
-
-                // remove start regex
-                errors = errors.replace(this.compileStartRegex, '');
+                // remove ts markers
+                output = output.replace(this.compileStartRegex, '');
+                output = output.replace(this.compileEndRegex, '');
 
                 // remove clear screen
-                errors = errors.replace(/\x1bc/g, '');
+                output = output.replace(/\x1bc/g, '');
 
                 // remove whitespace
-                errors = errors.trim();
+                output = output.trim();
 
-                if (errors) {
-                    process.stdout.write(`\x1b[3;31m${errors}\x1b[0m`);
+                if (output) {
+                    process.stdout.write(`\x1b[3;31m${output}\x1b[0m\n`);
                 }
+
+                output = '';
             }
         });
 
