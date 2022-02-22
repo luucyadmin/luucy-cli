@@ -169,7 +169,7 @@ export class Serve {
     }
 
     printOpenLinkMessage(packageConfiguration, server) {
-        console.log(`\nopen the following link to try out '${packageConfiguration.displayName}'\n\x1b[1m\x1b[4m${this.host}/workspaces#${packageConfiguration.name}:${server.address().port}\x1b[0m\n\n`);
+        console.log(`\nopen the following link to try out '${packageConfiguration.displayName}'\n\x1b[1m\x1b[4m${this.host}/workspaces#${packageConfiguration.name}:${server.address().port}\x1b[0m\n\n\n`);
     }
 
     bundle(source: string, packageConfiguration) {
