@@ -69,7 +69,7 @@ section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
 
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<rect fill="#${Array(6).fill(0).map(() => (Math.ceil(Math.random() * 10) + 5).toString(16)).join("")}" x="0" y="0" width="512" height="512"></rect>
+	<rect fill="#${Array(6).fill(0).map(() => (Math.ceil(Math.random() * 10) + 5).toString(16)).join("")}" x="0" y="0" width="512" height="512" rx="102.4"></rect>
 
 	<polygon fill-opacity="0.60" fill="#000000" points="389 405.12766 201.908288 451 59 286.846438 246.091712 241"></polygon>
 	<polygon fill-opacity="0.77" fill="#FFFFFF" points="245 242.053 315.041416 63 458 226.947 387.958584 406"></polygon>
