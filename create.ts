@@ -42,6 +42,7 @@ export class Creator {
 		fs.writeFileSync(path.join(name, Constants.packageFile), JSON.stringify({
 			name: id,
 			displayName: name,
+			icon: "icon.svg",
 			author: author,
 			version: "1.0.0"
 		}, null, "\t"));
