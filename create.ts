@@ -57,12 +57,14 @@ section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
 		fs.mkdirSync(path.join(name, Constants.assetsDirectory));
 		fs.writeFileSync(path.join(name, Constants.iconFile), this.getIcon());
 
-		console.log("installing luucy-types...");
-		childProcess.spawnSync(/^win/.test(process.platform) ? "npm.cmd" : "npm", ["install", Constants.typesPackage], {
-			cwd: name
-		});
+		for (let dependency of [Constants.typesPackage, "typescript"]) {
+			console.log(`installing '${dependency}'...`);
+			childProcess.spawnSync(/^win/.test(process.platform) ? "npm.cmd" : "npm", ["install", dependency], {
+				cwd: name
+			});
+		}
 
-		console.log(`\ndone! open ${path.join(process.cwd(), name)} in your editor of choice and use 'luucy serve' to try out your plugin`);
+		console.log(`\n\ndone! open ${path.join(process.cwd(), name)} in your editor of choice and use 'luucy serve' to try out your plugin`);
 	}
 
 	getIcon() {
