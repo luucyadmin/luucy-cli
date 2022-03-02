@@ -6,11 +6,6 @@ import { Scopes } from './scopes';
 import { Serve } from './serve';
 import { Updater } from './updater';
 
-const childProcess = require('child_process');
-const path = require('path');
-const fs = require('fs');
-const tar = require('tar');
-
 const parameters = process.argv.slice(process.argv.findIndex(arg => arg.includes('luucy')) + 1);
 const packageConfiguration = require('../package.json');
 

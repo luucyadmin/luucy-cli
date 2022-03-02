@@ -36,7 +36,7 @@ export class Serve {
         app.use('/assets', express.static(assetsPath));
 
         app.ws('/socket', socket => {
-            process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] connected to ${this.host}! sending plugin...\x1b[0m\n`);
+            process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ↔ connected to ${this.host}! sending plugin...\x1b[0m\n`);
 
             let source;
             
@@ -52,7 +52,7 @@ export class Serve {
                     const updatedPackageConfiguration = readPackageConfiguration();
 
                     if (updatedSource != source || JSON.stringify(packageConfiguration) != JSON.stringify(updatedPackageConfiguration)) {
-                        process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] updating ${packageConfiguration.displayName}...\x1b[0m\n`);
+                        process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ⇅ updating ${packageConfiguration.displayName}...\x1b[0m\n`);
 
                         source = updatedSource;
                         packageConfiguration = updatedPackageConfiguration;
@@ -69,28 +69,28 @@ export class Serve {
                 const message = JSON.parse(data);
 
                 if (message.installed) {
-                    process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] installed ${packageConfiguration.displayName}\x1b[0m\n`);
+                    process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ✓ installed ${packageConfiguration.displayName}\x1b[0m\n`);
                 } else if (message.installationError) {
-                    process.stdout.write(`[${new Date().toLocaleTimeString()}]\x1b[1;31m ${packageConfiguration.displayName} install failed!\n\n${message.installationError}\x1b[0m\n\n`);
+                    process.stdout.write(`[${new Date().toLocaleTimeString()}]\x1b[1;31m ${packageConfiguration.displayName} ✗ install failed!\n\n${message.installationError}\x1b[0m\n\n`);
                 } else if (message.log) {
-                    console.log(`\x1b[3m[${packageConfiguration.displayName}]\x1b[0m`, ...message.log);
+                    console.log(`\x1b[3m[${packageConfiguration.displayName}]\x1b[0m ›`, ...message.log);
                 } else if (message.warn) {
-                    console.warn(`\x1b[3;33m[${packageConfiguration.displayName}]\x1b[0;33m`, ...message.warn, '\x1b[0m');
+                    console.warn(`\x1b[3;33m[${packageConfiguration.displayName}]\x1b[0;33m ›`, ...message.warn, '\x1b[0m');
                 } else if (message.error) {
-                    console.error(`\x1b[3;31m[${packageConfiguration.displayName}]\x1b[1;31m`, ...message.error, '\x1b[0m');
+                    console.error(`\x1b[3;31m[${packageConfiguration.displayName}]\x1b[1;31m ›`, ...message.error, '\x1b[0m');
                 } else if (!message.ping) {
-                    console.log('Unknown message', message);
+                    console.log('⚠ unknown message', message);
                 }
             });
 
             socket.on('close', () => {
-                console.warn('debugger detached!');
+                console.warn('⚠ debugger detached!');
 
                 this.printOpenLinkMessage(packageConfiguration, server);
             });
         });
 
-        console.log('starting compiler...');
+        console.log('⇊ starting compiler...');
 
         const compiler = childProcess.spawn(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', [
             'tsc', '--watch', '--locale',  'en-us'
@@ -119,7 +119,7 @@ export class Serve {
                     output = output.trim();
 
                     if (output) {
-                        process.stdout.write(`\n\x1b[3;31m\x1b[1m[${new Date().toLocaleTimeString()}] failed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
+                        process.stdout.write(`\n\x1b[3;31m\x1b[1m[${new Date().toLocaleTimeString()}] ✗ failed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
                         process.stdout.write(`${output}\n\n`);
 
                         const missingScopeMatches = [
@@ -148,13 +148,13 @@ export class Serve {
                             process.stdout.write('\n');
                         }
                     } else {
-                        process.stdout.write(`\x1b[2m\x1b[2K\r[${new Date().toLocaleTimeString()}] successfully compiled '${packageConfiguration.displayName}' (${+new Date() - compilerStartedAt}ms)\x1b[0m\n`);
+                        process.stdout.write(`\x1b[2m\x1b[2K\r[${new Date().toLocaleTimeString()}] ✓ successfully compiled '${packageConfiguration.displayName}' (${+new Date() - compilerStartedAt}ms)\x1b[0m\n`);
                     }
 
                     output = '';
                     compilerStartedAt = null;
                 } else if (!compilerStartedAt) {
-                    process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}]compiling '${packageConfiguration.displayName}'...\x1b[0m`);
+                    process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ⇊ compiling '${packageConfiguration.displayName}'...\x1b[0m`);
 
                     compilerStartedAt = new Date();
                 }
@@ -169,7 +169,7 @@ export class Serve {
     }
 
     printOpenLinkMessage(packageConfiguration, server) {
-        console.log(`\nopen the following link to try out '${packageConfiguration.displayName}'\n\x1b[1m\x1b[4m${this.host}/workspaces#${packageConfiguration.name}:${server.address().port}\x1b[0m\n\n\n`);
+        console.log(`\nopen the following link to try out '${packageConfiguration.displayName}'\n→ \x1b[1m\x1b[4m${this.host}/workspaces#${packageConfiguration.name}:${server.address().port}\x1b[0m\n\n\n`);
     }
 
     bundle(source: string, packageConfiguration) {
