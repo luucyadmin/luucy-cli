@@ -44,7 +44,10 @@ export class Creator {
 			displayName: name,
 			icon: "icon.svg",
 			author: author,
-			version: "1.0.0"
+			version: "1.0.0",
+			scopes: [
+				"core"
+			]
 		}, null, "\t"));
 
 		fs.writeFileSync(path.join(name, "plugin.ts"), `
