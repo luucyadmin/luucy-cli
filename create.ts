@@ -46,7 +46,8 @@ export class Creator {
 			author: author,
 			version: "1.0.0",
 			scopes: [
-				"core"
+				"core",
+				"ui"
 			]
 		}, null, "\t"));
 
