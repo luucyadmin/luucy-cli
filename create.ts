@@ -1,23 +1,25 @@
-import { Constants } from "./constants";
+import { Constants } from './constants';
+import { Scopes } from './scopes';
 
-const fs = require("fs");
-const path = require("path");
-const readline = require("readline-sync");
-const childProcess = require("child_process");
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline-sync');
+const childProcess = require('child_process');
 
 export class Creator {
 	create() {
-		process.stdout.write("welcome to luucy!\n\n");
+		process.stdout.write('welcome to luucy!\n\n');
 
-		const name = readline.question("Module name (example: Heatwatt Calculator): ");
-		const author = readline.question("Author / Company (example: Heatwatt AG): ");
+		const name = readline.question('Module name (example: Heatwatt Calculator): ');
+		const author = readline.question('Author / Company (example: Heatwatt AG): ');
 
 		const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^\-+/, '').replace(/\-+$/, '') || 'plugin';
 
-		console.log("creating project files...");
+		console.log('creating project files...');
 		fs.mkdirSync(name);
+		process.chdir(name);
 
-		fs.writeFileSync(path.join(name, "tsconfig.json"), `
+		fs.writeFileSync('tsconfig.json', `
 {
 	// settings managed by luucy
 	// do not edit
@@ -39,34 +41,34 @@ export class Creator {
 }
 `.trim());
 
-		fs.writeFileSync(path.join(name, Constants.packageFile), JSON.stringify({
+		fs.writeFileSync(Constants.packageFile, JSON.stringify({
 			name: id,
 			displayName: name,
-			icon: "icon.svg",
+			icon: 'icon.svg',
 			author: author,
-			version: "1.0.0",
+			version: '1.0.0',
 			scopes: [
-				"core",
-				"ui"
+				'core',
+				'ui'
 			]
-		}, null, "\t"));
+		}, null, '\t'));
 
-		fs.writeFileSync(path.join(name, "plugin.ts"), `
+		fs.writeFileSync('plugin.ts', `
 		
 const section = ui.createProjectPanelSection();
 section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
 
 		`.trim());
 
-		fs.mkdirSync(path.join(name, Constants.assetsDirectory));
-		fs.writeFileSync(path.join(name, Constants.iconFile), this.getIcon());
+		fs.mkdirSync(Constants.assetsDirectory);
+		fs.writeFileSync(Constants.iconFile, this.getIcon());
 
-		for (let dependency of [Constants.typesPackage, "typescript"]) {
+		for (let dependency of [Constants.typesPackage, 'typescript']) {
 			console.log(`installing '${dependency}'...`);
-			childProcess.spawnSync(/^win/.test(process.platform) ? "npm.cmd" : "npm", ["install", dependency], {
-				cwd: name
-			});
+			childProcess.spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install', dependency]);
 		}
+
+		new Scopes().build();
 
 		console.log(`\n\ndone! open ${path.join(process.cwd(), name)} in your editor of choice and use 'luucy serve' to try out your plugin`);
 	}
