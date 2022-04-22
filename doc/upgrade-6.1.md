@@ -54,7 +54,7 @@ npm install -g luucy-cli
 4. Remove unintended imports: You may have accidentally imported some code from the `typescript` library, 
 fix this by removing all `import { ... } from 'typescript'` statements at the start of your plugin.ts 
 
-5. If your code is getting big, you can now move some parts to other files and import them like in any other typescript project (with `import { ... } from './somefile'`)
+5. (optional) If your code is getting big, you can now move some parts to other files and import them like in any other typescript project (with `import { ... } from './somefile'`)
 
 6. Run the following commands in a terminal
 ```
