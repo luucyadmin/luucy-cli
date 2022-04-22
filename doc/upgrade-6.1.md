@@ -66,8 +66,7 @@ luucy upgrade
 
 we decided to extend our platform to allow more influence of plugins on luucy itself - but we would like to keep some features only available to certain plugins, mostly our own (we are moving parts of luucy to plugins). thus, some features that you are using right now are not available by default and you will need to add those 'scopes' manually. 
 
-- a new scope can be added by using: `luucy add <the scopes name>`
-- if you would like to see all available scopes, use: `luucy scope list` (check it out, we added a LOT!)
+a new scope can be added by using: `luucy add <the scopes name>`, if you would like to see all available scopes, use: `luucy scope list` (check it out, we added a LOT!)
 
 - if you used the map (markers, polygons, ...), you'll need to add the 'map' scope, by using `luucy add map`
 - if you used data from luucy (project, variants, ...), you'll need 'data', `luucy add data`
