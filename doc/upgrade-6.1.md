@@ -63,6 +63,7 @@ luucy upgrade
 ```
 
 7. add missing luucy scopes
+
 we decided to extend our platform to allow more influence of plugins on luucy itself - but we would like to keep some features only available to certain plugins, mostly our own (we are moving parts of luucy to plugins). thus, some features that you are using right now are not available by default and you will need to add those 'scopes' manually. 
 
 a new scope can be added by using: `luucy add <the scopes name>`
