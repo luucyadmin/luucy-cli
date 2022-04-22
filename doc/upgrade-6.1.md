@@ -41,7 +41,7 @@ npm install -g luucy-cli
 		"core",
 		"ui"
 	],
-    "dependencies": {
+	"dependencies": {
 		"luucy-types": "^8.14.1"
 	},
 	"devDependencies": {
