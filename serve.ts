@@ -23,6 +23,9 @@ export class Serve {
         const app = express();
         ws(app);
 
+        let compilerOutput = '';
+        let compilerStartedAt;
+
         const readPackageConfiguration = () => {
             return JSON.parse(fs.readFileSync(Constants.packageFile).toString());
         };
@@ -48,6 +51,10 @@ export class Serve {
                 source = fs.readFileSync(Constants.distFile).toString();
 
                 socket.send(this.bundle(source, packageConfiguration));
+
+                if (compilerOutput) {
+                    socket.send(JSON.stringify({ compilerOutput }));
+                }
             }
 
             const update = () => {
@@ -102,33 +109,30 @@ export class Serve {
             stdio: 'pipe'
         });
 
-        let output = '';
-        let compilerStartedAt;
-
         const scopes = new Scopes().list();
 
         compiler.stdout.on('data', data => {
-            output += data.toString();
+            compilerOutput += data.toString();
 
-            if (output.match(this.compileStartRegex)) {
-                if (output.match(this.compileEndRegex)) {
+            if (compilerOutput.match(this.compileStartRegex)) {
+                if (compilerOutput.match(this.compileEndRegex)) {
                     // remove ts markers
-                    output = output.replace(this.compileStartRegex, '');
-                    output = output.replace(this.compileEndRegex, '');
+                    compilerOutput = compilerOutput.replace(this.compileStartRegex, '');
+                    compilerOutput = compilerOutput.replace(this.compileEndRegex, '');
 
                     // remove clear screen
-                    output = output.replace(/\x1bc/g, '');
+                    compilerOutput = compilerOutput.replace(/\x1bc/g, '');
 
                     // remove whitespace
-                    output = output.trim();
+                    compilerOutput = compilerOutput.trim();
 
-                    if (output) {
+                    if (compilerOutput) {
                         process.stdout.write(`\n\x1b[3;31m\x1b[1m[${new Date().toLocaleTimeString()}] ✗ failed to compile '${packageConfiguration.displayName}'!\x1b[0m\n`);
-                        process.stdout.write(`${output}\n\n`);
+                        process.stdout.write(`${compilerOutput}\n\n`);
 
                         const missingScopeMatches = [
-                            ...output.match(this.scopeNotFoundRegex) || [],
-                            ...output.match(this.complexScopeNotFoundRegex) || []
+                            ...compilerOutput.match(this.scopeNotFoundRegex) || [],
+                            ...compilerOutput.match(this.complexScopeNotFoundRegex) || []
                         ];
 
                         const missingScopes = [];
@@ -157,13 +161,11 @@ export class Serve {
 
                     for (let socket of sockets) {
                         try {
-                            socket.send(JSON.stringify({
-                                compilerOutput: output
-                            }));
+                            socket.send(JSON.stringify({ compilerOutput }));
                         } catch {}
                     }
 
-                    output = '';
+                    compilerOutput = '';
                     compilerStartedAt = null;
                 } else if (!compilerStartedAt) {
                     process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ⇊ compiling '${packageConfiguration.displayName}'...\x1b[0m`);
