@@ -35,7 +35,11 @@ export class Serve {
         console.log(`serving assets from '${assetsPath}'...`);
         app.use('/assets', express.static(assetsPath));
 
+        const sockets = [];
+
         app.ws('/socket', socket => {
+            sockets.push(socket);
+            
             process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ↔ connected to ${this.host}! sending plugin...\x1b[0m\n`);
 
             let source;
@@ -93,7 +97,7 @@ export class Serve {
         console.log('⇊ starting compiler...');
 
         const compiler = childProcess.spawn(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', [
-            'tsc', '--watch', '--locale',  'en-us'
+            'tsc', '--watch', '--locale',  'en-us', '--noEmitOnError'
         ], {
             stdio: 'pipe'
         });
@@ -149,6 +153,14 @@ export class Serve {
                         }
                     } else {
                         process.stdout.write(`\x1b[2m\x1b[2K\r[${new Date().toLocaleTimeString()}] ✓ successfully compiled '${packageConfiguration.displayName}' (${+new Date() - compilerStartedAt}ms)\x1b[0m\n`);
+                    }
+
+                    for (let socket of sockets) {
+                        try {
+                            socket.send(JSON.stringify({
+                                compilerOutput: output
+                            }));
+                        } catch {}
                     }
 
                     output = '';
