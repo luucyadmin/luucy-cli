@@ -110,12 +110,15 @@ export class Serve {
         });
 
         const scopes = new Scopes().list();
+        let output = '';
 
         compiler.stdout.on('data', data => {
-            compilerOutput += data.toString();
+            output += data.toString();
 
-            if (compilerOutput.match(this.compileStartRegex)) {
-                if (compilerOutput.match(this.compileEndRegex)) {
+            if (output.match(this.compileStartRegex)) {
+                if (output.match(this.compileEndRegex)) {
+                    compilerOutput = output;
+
                     // remove ts markers
                     compilerOutput = compilerOutput.replace(this.compileStartRegex, '');
                     compilerOutput = compilerOutput.replace(this.compileEndRegex, '');
@@ -165,7 +168,7 @@ export class Serve {
                         } catch {}
                     }
 
-                    compilerOutput = '';
+                    output = '';
                     compilerStartedAt = null;
                 } else if (!compilerStartedAt) {
                     process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ⇊ compiling '${packageConfiguration.displayName}'...\x1b[0m`);
