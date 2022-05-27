@@ -63,10 +63,11 @@ section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
 		fs.mkdirSync(Constants.assetsDirectory);
 		fs.writeFileSync(Constants.iconFile, this.getIcon());
 
-		for (let dependency of [Constants.typesPackage, 'typescript']) {
-			console.log(`installing '${dependency}'...`);
-			childProcess.spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install', dependency]);
-		}
+		console.log(`installing luucy types...`);
+		childProcess.spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install', Constants.typesPackage]);
+
+		console.log(`installing typescript compiler...`);
+		childProcess.spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install', '--save-dev', 'typescript']);
 
 		new Scopes().build();
 
