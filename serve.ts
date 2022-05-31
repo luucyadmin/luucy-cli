@@ -36,6 +36,13 @@ export class Serve {
         const assetsPath = path.join(process.cwd(), 'assets');
 
         console.log(`serving assets from '${assetsPath}'...`);
+
+        app.use((req, res, next) => {
+            res.header('Access-Control-Allow-Origin', '*');
+
+            next();
+        });
+        
         app.use('/assets', express.static(assetsPath));
 
         const sockets = [];
