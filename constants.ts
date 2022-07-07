@@ -10,6 +10,7 @@ export class Constants {
     static bundleName = (name, version) => `${name.toLowerCase().trim().replace(/[^a-z0-9]/, '-').replace(/\-+/, '-')}-${version}.lpb`;
 
     static typesPackage = 'luucy-types';
+    static typesRepository = branch => `luucyadmin/luucy-types.git#next/${branch}`;
     static typesRoot = path.join('node_modules', this.typesPackage);
     static scopes = path.join(this.typesRoot, 'scopes');
 

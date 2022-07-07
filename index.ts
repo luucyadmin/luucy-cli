@@ -54,7 +54,7 @@ switch (parameters.shift()) {
 
     case 'upgrade': {
         const updater = new Updater();
-        updater.update(process.argv.includes('--next')).then(() => {
+        updater.update(process.argv.includes('--next'), process.argv[process.argv.indexOf('--next') + 1]).then(() => {
             process.exit(0);
         });
 

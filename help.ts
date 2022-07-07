@@ -23,7 +23,7 @@ export function printHelp() {
             purpose: 'Upgrades the luucy type mappings',
             arguments: [
                 {
-                    name: '--next',
+                    name: '--next [{branch}]',
                     purpose: 'Upgrades to next version, for testing only'
                 }
             ]

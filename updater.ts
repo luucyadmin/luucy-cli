@@ -4,14 +4,14 @@ const fs = require("fs");
 const childProcess = require("child_process");
 
 export class Updater {
-    async update(useNext: boolean) {
+    async update(useNext: boolean, branch: string) {
         console.log("reading plugin package...");
 
         const currentVersion = this.getTypeVersion();
         console.log(`current version: '${currentVersion}'`);
 
         console.log("upgrading package...");
-        childProcess.spawnSync(/^win/.test(process.platform) ? "npm.cmd" : "npm", ["install", `${Constants.typesPackage}@${useNext ? "next" : "latest"}`]);
+        childProcess.spawnSync(/^win/.test(process.platform) ? "npm.cmd" : "npm", ["install", (useNext && branch) ? Constants.typesRepository(branch) : `${Constants.typesPackage}@${useNext ? "next" : "latest"}`]);
 
         const newVersion = this.getTypeVersion();
 
