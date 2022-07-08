@@ -15,7 +15,9 @@ export class Updater {
 
         const newVersion = this.getTypeVersion();
 
-        if (newVersion != currentVersion) {
+        if (useNext && branch) {
+            console.log(`\x1b[1mupdated to '${Constants.typesRepository(branch)}'\x1b[11m`);
+        } else if (newVersion != currentVersion) {
             console.log(`upgraded from '\x1b[1m${currentVersion}\x1b[11m' -> '\x1b[1m${newVersion}\x1b[11m'`);
         } else {
             console.log(`\x1b[1malready up to date!\x1b[11m`);
