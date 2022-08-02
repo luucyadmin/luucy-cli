@@ -11,8 +11,8 @@ export class Constants {
 
     static typesPackage = 'luucy-types';
     static typesRepository = branch => `luucyadmin/luucy-types.git#next/${branch}`;
-    static typesRoot = path.join('node_modules', this.typesPackage);
-    static scopes = path.join(this.typesRoot, 'scopes');
+    static typesRoot = ['node_modules', this.typesPackage];
+    static scopes = path.join(...this.typesRoot, 'scopes');
 
     static managed = '.luucy';
     static managedTypes = path.join(this.managed, 'types.d.ts');
