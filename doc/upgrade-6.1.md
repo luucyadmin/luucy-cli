@@ -33,7 +33,10 @@ npm install -g luucy-cli
 ```
 {
 	"name": < your-plugins-name >,
-	"displayName": < Your Plugins Human Readable Name >,
+	"displayName": {
+		"en": < Your Plugins Human Readable Name >,
+		"de": ...
+	},
 	"icon": "icon.svg",
 	"author": < Your companies name >,
 	"version": "1.0.0",
