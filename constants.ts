@@ -20,6 +20,6 @@ export class Constants {
     static environments = {
         test: 'http://localhost:4200',
         staging: 'https://staging.luucy.ch',
-        productive: 'https://luucy.ch'
+        productive: 'https://app.luucy.ch'
     };
 }

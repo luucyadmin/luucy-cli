@@ -58,6 +58,6 @@ export class Publisher {
             
         console.log(`'${packageConfiguration.name}' (v${version}) built and packaged!\n`);
         console.log(`Go to the following page and upload '${fileName}'`);
-        console.log(`\x1b[1m\x1b[4mhttps://luucy.ch/developer\x1b[0m`);
+        console.log(`\x1b[1m\x1b[4mhttps://app.luucy.ch/developer\x1b[0m`);
     }
 }
