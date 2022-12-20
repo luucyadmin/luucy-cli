@@ -3,10 +3,8 @@
 # luucy command line interface
 Developer tool for luucy plugin development
 
-> View [the upgrade guide for 6.1](doc/upgrade-6.1.md) for upgrading to the latest luucy version
-
 ## Installing the develoepr tools / cli
-You need to install [nodejs and npm](https://nodejs.dev/learn/how-to-install-nodejs) first.
+You need to install [nodejs and npm](https://nodejs.dev/en/learn/how-to-install-nodejs/) first.
 
 Type the following command in your terminal to install luucy cli on your system.
 
