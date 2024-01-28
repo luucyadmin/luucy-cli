@@ -16,7 +16,13 @@ export function printHelp() {
         },
         { 
             name: 'luucy publish', 
-            purpose: 'Publish a plugin to the luucy marketplace' 
+            purpose: 'Publish a plugin to the luucy marketplace',
+            arguments: [
+                {
+                    name: '[{version}]',
+                    purpose: 'New version name. Typically an increment of semantic version (e.g. 1.0.1)'
+                }
+            ]
         },
         {
             name: 'luucy upgrade',
