@@ -1,0 +1,9 @@
+test-publish:
+  image: node:latest
+  stage: test
+  before_script:
+    - npm install
+  script:
+    - npm publish --dry-run
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
