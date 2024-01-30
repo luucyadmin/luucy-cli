@@ -1,4 +1,5 @@
-[![npm version](https://badge.acryps.com/npm/luucy-cli)](https://badge.acryps.com/go/npm/luucy-cli)
+[![NPM Version](https://img.shields.io/npm/v/luucy-cli?style=flat-square&color=00894D&logo=npm&label=luucy-cli&labelColor=white)](https://www.npmjs.com/package/luucy-cli)
+
 
 # LUUCY Command Line Interface
 Developer tools for luucy app development.
