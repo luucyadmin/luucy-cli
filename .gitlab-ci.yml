@@ -1,0 +1,14 @@
+include:
+  - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
+  - template: Jobs/SAST.latest.gitlab-ci.yml
+
+test-publish:
+  image: node:latest
+  stage: test
+  before_script:
+    - npm install
+  script:
+    - npm publish --dry-run
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
