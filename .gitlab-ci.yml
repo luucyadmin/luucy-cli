@@ -3,7 +3,15 @@ include:
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
 
-test-publish:
+build:
+  image: node:latest
+  stage: build
+  before_script:
+    - npm install
+  script:
+    - npm exec tsc
+
+test:publish:
   image: node:latest
   stage: test
   before_script:
