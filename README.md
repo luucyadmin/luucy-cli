@@ -1,48 +1,95 @@
-[![npm version](https://badge.acryps.com/npm/luucy-cli)](https://badge.acryps.com/go/npm/luucy-cli)
+[![NPM Version](https://img.shields.io/npm/v/luucy-cli?style=flat-square&color=00894D&logo=npm&label=luucy-cli&labelColor=white)](https://www.npmjs.com/package/luucy-cli)
 
-# luucy command line interface
-Developer tool for luucy plugin development
 
-## Installing the develoepr tools / cli
-You need to install [nodejs and npm](https://nodejs.dev/en/learn/how-to-install-nodejs/) first.
+# LUUCY Command Line Interface
 
-Type the following command in your terminal to install luucy cli on your system.
+Developer tools for [LUUCY](https://luucy.ch) app development.
 
-```
-$ npm install -g luucy-cli
-```
+## Installing
 
-You can use the command line interface by typing `luucy` in a terminal.
+To install luucy-cli, make sure you have [nodejs and npm](https://nodejs.org/en/download/package-manager) installed on your system.
 
-## Create Project
-Open a terminal and type the following command to create a new plugin.
-```
-$ luucy create
+Then type the following command in your terminal to install luucy-cli:
+
+```bash
+npm install -g luucy-cli
 ```
 
-Luucy CLI will create all required files after asking you for a name and an author.
+From here you can use the command line interface by typing `luucy` in a terminal.
 
-### Luucy plugin project structure
-A luucy plugin contains the following files by default:
+## Starting a project
 
-> `{Project Name}/`
->> `package.json` &nbsp; Package configuration, contains name & author<br>
->> `plugin.ts` &nbsp; Main plugin source file (edit this one)<br>
->> `tsconfig.json` &nbsp; TypeScript compiler configuration (managed by luucy) <br><br>
->> `assets/` &nbsp; Assets that will be available to your plugin
->>> `icon.svg` &nbsp; Icon for your plugin
+Open a terminal and type the following command to create a new app:
 
-## Debug your Project
-Use the following command to open the plugin in luucy locally.
-```
-$ luucy serve
+```bash
+luucy create
 ```
 
-This will automatically start a debuggin server. Open the link provided by luucy serve to see your plugin in action!
+Luucy CLI will create all required files after asking you for a name and an author. Now open up the project in your favorite text editor and start exploring.
 
-Console output and errors of your application will appear in the terminal where you started the plugin from.
+### App anatomy
 
-Any changes to your code will automatically reload the plugin!
+A LUUCY app contains the following files by default:
 
-## Issues / Feature Requests
-Feel free to [open an issue](https://github.com/luucyadmin/luucy-cli/issues/new?assignees=&labels=&template=feature_request.md) if a feature is missing from the luucy environment.
+```
+my-app
+|-- plugin.ts           start here (main app source file)
+|-- assets              media assets, e.g. icon
+|   `-- icon.svg        icon for your plugin
+|-- package.json        package configuration
+`-- tsconfig.json       TypeScript configuration (don't touch)
+```
+
+## Run your app locally
+
+To run your LUUCY app use:
+
+```bash
+luucy serve
+```
+
+This will automatically start a debugging session. Open the link provided in the terminal output to see your app in action.
+
+Console output like errors will appear in the terminal where you started the app as well the browser console.
+
+Any changes to your code will automatically hot reload the app.
+
+## Resources
+
+For documentation on the SDK itself, see [sdk.luucy.ch](https://sdk.luucy.ch).
+
+To see available luucy-cli commands use
+
+```bash
+luucy help
+```
+
+```
+
+     · ·        __
+   · + + ·     / /_  ____  _________  __
+   + + + +    / / / / / / / / ___/ / / /
+   + + + +   / / /_/ / /_/ / /__/ /_/ /
+   · + + ·  /_/\__,_/\__,_/\___/\__, /
+     · ·    v6.3.0             /____/
+
+luucy create            Creates an empty plugin locally
+luucy serve             Debug plugin locally
+    --test              Launch debugger for http://localhost:4200 (test environment)
+    --staging           Launch debugger for https://staging.luucy.ch (staging environment)
+    --productive        Launch debugger for https://app.luucy.ch (productive environment)
+luucy publish           Publish a plugin to the luucy marketplace
+luucy upgrade           Upgrades the luucy type mappings
+    --next [{branch}]   Upgrades to next version, for testing only
+luucy scope             Manage luucy scopes
+    add {scope}         Adds a new scope
+    list                Lists all available scopes
+    build               Rebuilds definitions
+luucy add               Add a new scope (shorthand for luucy scope add)
+    {scope}             Scope name. Use luucy scope list to view all available scopes
+luucy help              Prints this help page
+```
+
+## Feature Requests
+
+Got an idea? Feel free to [open an issue](https://github.com/luucyadmin/luucy-cli/issues/new?assignees=&labels=&template=feature_request.md) and get in touch.

@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Add something to the luucy plugin environment
+about: Add something to the LUUCY app environment
 title: ''
 labels: ''
 assignees: ''
