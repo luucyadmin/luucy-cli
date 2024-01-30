@@ -6,8 +6,7 @@
     },
     "main": "dist/index.js",
     "scripts": {
-        "preversion": "tsc",
-        "prepublish": "git push"
+        "preversion": "tsc"
     },
     "devDependencies": {
         "@types/node": "^16.10.2"
