@@ -2,6 +2,7 @@ include:
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
 
 build:
   image: node:latest
