@@ -7,10 +7,10 @@ export class Constants {
     static iconFile = path.join(this.assetsDirectory, 'icon.svg');
 
     static bundlesDirectory = 'bundles/';
-    static bundleName = (name, version) => `${name.toLowerCase().trim().replace(/[^a-z0-9]/, '-').replace(/\-+/, '-')}-${version}.lpb`;
+    static bundleName = (name: string, version: string) => `${name.toLowerCase().trim().replaceAll(/[^a-z0-9]/g, '-').replaceAll(/\-+/g, '-')}-${version}.lpb`;
 
     static typesPackage = 'luucy-types';
-    static typesRepository = branch => `luucyadmin/luucy-types.git#next/${branch}`;
+    static typesRepository = (branch: string) => `luucyadmin/luucy-types.git#next/${branch}`;
     static typesRoot = ['node_modules', this.typesPackage];
     static scopes = path.join(...this.typesRoot, 'scopes');
 

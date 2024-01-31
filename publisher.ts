@@ -9,7 +9,7 @@ const readline = require("readline-sync");
 export class Publisher {
     constructor() {}
 
-    async publish() {
+    async publish(version: string | undefined) {
         console.log(`reading ${Constants.packageFile}...`);
         const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
 
@@ -25,8 +25,10 @@ export class Publisher {
             process.exit(1);
         }
 
-        console.log(`\n'${packageConfiguration.name}' is currently on version '${packageConfiguration.version}'. How should the new version be called?`);
-        const version = readline.question("Next version: ");
+        if (!version) {
+            console.log(`\n'${packageConfiguration.name}' is currently on version '${packageConfiguration.version}'. How should the new version be called?`);
+            version = readline.question("Next version: ");
+        }
 
         console.log(`upgrading to '${version}'...`);
         const versionUpgrade = childProcess.spawnSync("npm", ["version", version]);

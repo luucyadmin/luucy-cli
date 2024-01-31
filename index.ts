@@ -45,7 +45,7 @@ switch (parameters.shift()) {
 
     case 'publish': {
         const publisher = new Publisher();
-        publisher.publish().then(() => {
+        publisher.publish(parameters.shift()).then(() => {
             process.exit(0);
         });
 
