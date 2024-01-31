@@ -41,13 +41,24 @@ module.exports = {
         'max-classes-per-file': 'off',
         'class-methods-use-this': 'off',
         radix: 'off',
-        'no-console': 'warn',
+        'no-console': 'off',
         'import/no-deprecated': 'off',
-        '@typescript-eslint/ban-ts-comment': ['warn', { 'ts-expect-error': 'allow-with-description' }]
+        '@typescript-eslint/ban-ts-comment': ['warn', { 'ts-expect-error': 'allow-with-description' }],
+        
+        // TODO: remove temporary migration exceptions
+        'no-useless-escape': 'off',
+        'no-fallthrough': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-useless-constructor': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/no-use-before-define': 'off',
+        'no-control-regex': 'off',
+        '@typescript-eslint/no-shadow': 'off',
+        'no-empty': 'off'
       }
     },
     {
-      files: ['**/*.json',"!**/node_modules/**"],
+      files: ['**/*.json', '!**/node_modules/**'],
       extends: ['plugin:json/recommended']
     }
   ]
