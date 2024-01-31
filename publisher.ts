@@ -1,4 +1,3 @@
-import { version } from "os";
 import { Constants } from "./constants";
 
 const fs = require("fs");
