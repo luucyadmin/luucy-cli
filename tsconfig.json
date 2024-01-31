@@ -4,7 +4,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "dist",
+    "rootDir": "src",
     "types": ["node", "jest"]
   },
-  "exclude": ["tests"]
+  "exclude": ["**/*.spec.ts", "**/*.config.ts"]
 }

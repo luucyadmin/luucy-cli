@@ -6,11 +6,7 @@ const config: Config = {
     "^.+\\.(ts|tsx)?$": "ts-jest",
   },
   collectCoverage: true,
-  collectCoverageFrom: [
-    "**/*.{ts,tsx}",
-    "!**/node_modules/**",
-    "!**/*.config.{js,ts,tsx}",
-  ],
+  collectCoverageFrom: ["src/**/*.{ts,tsx}"],
   coverageReporters: ["cobertura", "lcov", "text"],
   reporters: ["default", ["jest-junit", { outputDirectory: "reports" }]],
 };
