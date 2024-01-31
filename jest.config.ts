@@ -12,6 +12,7 @@ const config: Config = {
     "!**/*.config.{js,ts,tsx}",
   ],
   coverageReporters: ["cobertura", "lcov", "text"],
+  reporters: ["default", ["jest-junit", { outputDirectory: "reports" }]],
 };
 
 export default config;
