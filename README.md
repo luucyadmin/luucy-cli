@@ -1,6 +1,5 @@
 [![NPM Version](https://img.shields.io/npm/v/luucy-cli?style=flat-square&color=00894D&logo=npm&label=luucy-cli&labelColor=white)](https://www.npmjs.com/package/luucy-cli)
 
-
 # LUUCY Command Line Interface
 
 Developer tools for [LUUCY](https://luucy.ch) app development.
@@ -79,6 +78,7 @@ luucy serve             Debug plugin locally
     --staging           Launch debugger for https://staging.luucy.ch (staging environment)
     --productive        Launch debugger for https://app.luucy.ch (productive environment)
 luucy publish           Publish a plugin to the luucy marketplace
+    [{version}]         New version name. Typically an increment of semantic version (e.g. 1.0.1)
 luucy upgrade           Upgrades the luucy type mappings
     --next [{branch}]   Upgrades to next version, for testing only
 luucy scope             Manage luucy scopes
