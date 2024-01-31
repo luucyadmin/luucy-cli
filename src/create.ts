@@ -7,11 +7,31 @@ const readline = require('readline-sync');
 const childProcess = require('child_process');
 
 export class Creator {
+  name?: string;
+
+  author?: string;
+
+  scopes: Scopes;
+
+  iconColor: string;
+
+  constructor(name?: string, author?: string, scopes?: Scopes, iconColor?: string) {
+    this.name = name;
+    this.author = author;
+    this.scopes = scopes || new Scopes();
+    this.iconColor =
+      iconColor ||
+      Array(6)
+        .fill(0)
+        .map(() => (Math.ceil(Math.random() * 10) + 5).toString(16))
+        .join('');
+  }
+
   create() {
     process.stdout.write('welcome to luucy!\n\n');
 
-    const name = readline.question('Module name (example: Heatwatt Calculator): ');
-    const author = readline.question('Author / Company (example: Heatwatt AG): ');
+    const name = this.name || readline.question('Module name (example: Heatwatt Calculator): ');
+    const author = this.author || readline.question('Author / Company (example: Heatwatt AG): ');
 
     const id =
       name
@@ -22,10 +42,9 @@ export class Creator {
 
     console.log('creating project files...');
     fs.mkdirSync(name);
-    process.chdir(name);
 
     fs.writeFileSync(
-      'tsconfig.json',
+      path.join(name, 'tsconfig.json'),
       `
 {
 	// settings managed by luucy
@@ -50,7 +69,7 @@ export class Creator {
     );
 
     fs.writeFileSync(
-      Constants.packageFile,
+      path.join(name, Constants.packageFile),
       JSON.stringify(
         {
           name: id,
@@ -66,7 +85,7 @@ export class Creator {
     );
 
     fs.writeFileSync(
-      'plugin.ts',
+      path.join(name, 'plugin.ts'),
       `
 		
 const section = ui.createProjectPanelSection();
@@ -75,8 +94,8 @@ section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
 		`.trim()
     );
 
-    fs.mkdirSync(Constants.assetsDirectory);
-    fs.writeFileSync(Constants.iconFile, this.getIcon());
+    fs.mkdirSync(path.join(name, Constants.assetsDirectory));
+    fs.writeFileSync(path.join(name, Constants.iconFile), this.getIcon());
 
     console.log(`installing luucy types...`);
     childProcess.spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install', Constants.typesPackage]);
@@ -84,7 +103,7 @@ section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
     console.log(`installing typescript compiler...`);
     childProcess.spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install', '--save-dev', 'typescript']);
 
-    new Scopes().build();
+    this.scopes.build();
 
     console.log(`\n\ndone! open ${path.join(process.cwd(), name)} in your editor of choice and use 'luucy serve' to try out your plugin`);
   }
@@ -94,10 +113,7 @@ section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
 
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<rect fill="#${Array(6)
-    .fill(0)
-    .map(() => (Math.ceil(Math.random() * 10) + 5).toString(16))
-    .join('')}" x="0" y="0" width="512" height="512" rx="102.4"></rect>
+	<rect fill="#${this.iconColor}" x="0" y="0" width="512" height="512" rx="102.4"></rect>
 
 	<polygon fill-opacity="0.60" fill="#000000" points="389 405.12766 201.908288 451 59 286.846438 246.091712 241"></polygon>
 	<polygon fill-opacity="0.77" fill="#FFFFFF" points="245 242.053 315.041416 63 458 226.947 387.958584 406"></polygon>
