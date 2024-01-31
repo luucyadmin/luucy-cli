@@ -1,96 +1,101 @@
-import { Constants } from "./constants";
+import { Constants } from './constants';
 
 const path = require('path');
 const fs = require('fs');
-const readline = require("readline-sync");
+const readline = require('readline-sync');
 
 export class Scopes {
-    add(name: string) {
-        if (!this.list().includes(name)) {
-            throw new Error(`Scope '${name}' not found. Use 'luucy scope list' to view all available scopes. You may need to update luucy ('luucy upgrade')`);
-        }
-
-        const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
-        
-        this.addScope(packageConfiguration, name);
-
-        packageConfiguration.scopes = packageConfiguration.scopes.sort((a, b) => a > b);
-
-        fs.writeFileSync(Constants.packageFile, JSON.stringify(packageConfiguration, null, '\t'));
-
-        this.build();
-
-        process.stdout.write(`\nscope '${name}' added successfuly\n\n`);
-
-        return true;
+  add(name: string) {
+    if (!this.list().includes(name)) {
+      throw new Error(
+        `Scope '${name}' not found. Use 'luucy scope list' to view all available scopes. You may need to update luucy ('luucy upgrade')`
+      );
     }
 
-    private addScope(packageConfiguration, name: string) {
-        const info = this.info(name);
+    const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
 
-        if (info.permission) {
-            process.stdout.write(`${name}: \x1b[3;33m${info.permission}\x1b[0m\n`);
+    this.addScope(packageConfiguration, name);
 
-            if (!readline.keyInYN('Do you really want to add this scope?')) {
-                process.exit(2);
-            }
-        }
+    packageConfiguration.scopes = packageConfiguration.scopes.sort((a, b) => a > b);
 
-        for (let dependency of info.dependencies || []) {
-            process.stdout.write(`\x1b[2m→ installing dependency '${dependency}' of '${name}'\x1b[0m\n`);
+    fs.writeFileSync(Constants.packageFile, JSON.stringify(packageConfiguration, null, '\t'));
 
-            this.addScope(packageConfiguration, dependency);
-        }
+    this.build();
 
-        if (packageConfiguration.scopes) {
-            if (packageConfiguration.scopes.includes(name)) {
-                return false;
-            }
+    process.stdout.write(`\nscope '${name}' added successfuly\n\n`);
 
-            packageConfiguration.scopes.push(name);
-        } else {
-            packageConfiguration.scopes = [name];
-        }
+    return true;
+  }
+
+  private addScope(packageConfiguration, name: string) {
+    const info = this.info(name);
+
+    if (info.permission) {
+      process.stdout.write(`${name}: \x1b[3;33m${info.permission}\x1b[0m\n`);
+
+      if (!readline.keyInYN('Do you really want to add this scope?')) {
+        process.exit(2);
+      }
     }
 
-    list() {
-        return fs.readdirSync(Constants.scopes) as string[];
+    for (const dependency of info.dependencies || []) {
+      process.stdout.write(`\x1b[2m→ installing dependency '${dependency}' of '${name}'\x1b[0m\n`);
+
+      this.addScope(packageConfiguration, dependency);
     }
 
-    info(name: string) {
-        for (let scope of this.list()) {
-            if (scope == name) {
-                return JSON.parse(fs.readFileSync(path.join(Constants.scopes, name, 'scope.json')).toString());
-            }
-        }
+    if (packageConfiguration.scopes) {
+      if (packageConfiguration.scopes.includes(name)) {
+        return false;
+      }
+
+      packageConfiguration.scopes.push(name);
+    } else {
+      packageConfiguration.scopes = [name];
+    }
+  }
+
+  list() {
+    return fs.readdirSync(Constants.scopes) as string[];
+  }
+
+  info(name: string) {
+    for (const scope of this.list()) {
+      if (scope == name) {
+        return JSON.parse(fs.readFileSync(path.join(Constants.scopes, name, 'scope.json')).toString());
+      }
+    }
+  }
+
+  build() {
+    const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
+    const available = this.list();
+
+    const declarations = [];
+
+    for (const scope of packageConfiguration.scopes || []) {
+      if (!available.includes(scope)) {
+        throw new Error(`Scope '${scope}' not found. You may need to update luucy ('luucy upgrade')`);
+      }
+
+      declarations.push(`/// <reference path="${path.join('..', Constants.scopes, scope, 'index.d.ts')}" />`);
     }
 
-    build() {
-        const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
-        const available = this.list();
-
-        const declarations = [];
-
-        for (let scope of packageConfiguration.scopes || []) {
-            if (!available.includes(scope)) {
-                throw new Error(`Scope '${scope}' not found. You may need to update luucy ('luucy upgrade')`);
-            }
-
-            declarations.push(`/// <reference path="${path.join('..', Constants.scopes, scope, 'index.d.ts')}" />`);
-        }
-
-        if (!fs.existsSync(Constants.managed)) {
-            fs.mkdirSync(Constants.managed);
-        }
-
-        fs.writeFileSync(Constants.managedTypes, [
-            '// enabled declarations, generated by luucy cli',
-            '// autogenerated. changes will be overwritten',
-            '',
-            '/// <reference no-default-lib="true"/>',
-            `/// <reference path="${['..', ...Constants.typesRoot, 'globals', 'index.d.ts'].join('/')}" />`,
-            '',
-            ...declarations
-        ].join('\n'));
+    if (!fs.existsSync(Constants.managed)) {
+      fs.mkdirSync(Constants.managed);
     }
+
+    fs.writeFileSync(
+      Constants.managedTypes,
+      [
+        '// enabled declarations, generated by luucy cli',
+        '// autogenerated. changes will be overwritten',
+        '',
+        '/// <reference no-default-lib="true"/>',
+        `/// <reference path="${['..', ...Constants.typesRoot, 'globals', 'index.d.ts'].join('/')}" />`,
+        '',
+        ...declarations
+      ].join('\n')
+    );
+  }
 }

@@ -21,6 +21,15 @@ code_quality:
   before_script:
     - npm ci --cache .npm --prefer-offline
 
+lint:
+  <<: *node
+  stage: build
+  script:
+    - npm run lint:ci
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
 build:
   <<: *node
   stage: build
