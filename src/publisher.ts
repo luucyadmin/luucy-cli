@@ -9,10 +9,29 @@ const readline = require('readline-sync');
 export class Publisher {
   constructor() {}
 
-  async publish(version: string | undefined) {
-    console.log(`reading ${Constants.packageFile}...`);
-    const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
+  async build(dry: boolean) {
+    const packageConfiguration = this.readPackageConfig();
+    this._build(packageConfiguration);
+    if (!dry) {
+      await this.bundle(packageConfiguration, packageConfiguration.version);
+    } else {
+      console.log(`'${packageConfiguration.name}' built!\n`);
+    }
+  }
 
+  async publish(version: string | undefined) {
+    const packageConfiguration = this.readPackageConfig();
+    this._build(packageConfiguration);
+    this.changeVersion(packageConfiguration, version);
+    await this.bundle(packageConfiguration, version);
+  }
+
+  private readPackageConfig() {
+    console.log(`reading ${Constants.packageFile}...`);
+    return JSON.parse(fs.readFileSync(Constants.packageFile).toString());
+  }
+
+  private _build(packageConfiguration) {
     console.log(`building '${packageConfiguration.name}'...`);
     const tsc = childProcess.spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['tsc']);
 
@@ -24,7 +43,9 @@ export class Publisher {
 
       process.exit(1);
     }
+  }
 
+  private changeVersion(packageConfiguration, version) {
     if (!version) {
       console.log(
         `\n'${packageConfiguration.name}' is currently on version '${packageConfiguration.version}'. How should the new version be called?`
@@ -43,7 +64,9 @@ export class Publisher {
 
       process.exit(1);
     }
+  }
 
+  private async bundle(packageConfiguration, version) {
     const fileName = path.join(Constants.bundlesDirectory, Constants.bundleName(packageConfiguration.name, version));
 
     if (!fs.existsSync(Constants.bundlesDirectory)) {

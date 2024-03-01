@@ -15,8 +15,18 @@ export function printHelp() {
       }))
     },
     {
+      name: 'luucy build',
+      purpose: 'Build a plugin',
+      arguments: [
+        {
+          name: '[--dry]',
+          purpose: 'Dry run without creating a bundle. Useful for checking for compilation errors'
+        }
+      ]
+    },
+    {
       name: 'luucy publish',
-      purpose: 'Publish a plugin to the luucy marketplace',
+      purpose: 'Build and publish a plugin to the luucy marketplace',
       arguments: [
         {
           name: '[{version}]',
