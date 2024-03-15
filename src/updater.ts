@@ -1,6 +1,6 @@
 import { Constants } from './constants';
+import { readPackageConfiguration } from './package-config';
 
-const fs = require('fs');
 const childProcess = require('child_process');
 
 export class Updater {
@@ -28,7 +28,7 @@ export class Updater {
   }
 
   getTypeVersion() {
-    const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile));
+    const packageConfiguration = readPackageConfiguration();
 
     if (!packageConfiguration.dependencies) {
       throw new Error(`No dependencies in ${Constants.packageFile}`);

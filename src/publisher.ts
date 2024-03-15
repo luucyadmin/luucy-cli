@@ -1,4 +1,5 @@
 import { Constants } from './constants';
+import { PackageConfiguration, readPackageConfiguration } from './package-config';
 
 const fs = require('fs');
 const path = require('path');
@@ -10,7 +11,7 @@ export class Publisher {
   constructor() {}
 
   async build(dry: boolean) {
-    const packageConfiguration = this.readPackageConfig();
+    const packageConfiguration = readPackageConfiguration();
     this._build(packageConfiguration);
     if (!dry) {
       await this.bundle(packageConfiguration, packageConfiguration.version);
@@ -20,18 +21,13 @@ export class Publisher {
   }
 
   async publish(version: string | undefined) {
-    const packageConfiguration = this.readPackageConfig();
+    const packageConfiguration = readPackageConfiguration();
     this._build(packageConfiguration);
     version = this.changeVersion(packageConfiguration, version);
     await this.bundle(packageConfiguration, version);
   }
 
-  private readPackageConfig() {
-    console.log(`reading ${Constants.packageFile}...`);
-    return JSON.parse(fs.readFileSync(Constants.packageFile).toString());
-  }
-
-  private _build(packageConfiguration) {
+  private _build(packageConfiguration: PackageConfiguration) {
     console.log(`building '${packageConfiguration.name}'...`);
     const tsc = childProcess.spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['tsc']);
 
@@ -45,7 +41,7 @@ export class Publisher {
     }
   }
 
-  private changeVersion(packageConfiguration, version) {
+  private changeVersion(packageConfiguration: PackageConfiguration, version: string) {
     if (!version) {
       console.log(
         `\n'${packageConfiguration.name}' is currently on version '${packageConfiguration.version}'. How should the new version be called?`
@@ -67,7 +63,7 @@ export class Publisher {
     return version;
   }
 
-  private async bundle(packageConfiguration, version) {
+  private async bundle(packageConfiguration: PackageConfiguration, version: string) {
     const fileName = path.join(Constants.bundlesDirectory, Constants.bundleName(packageConfiguration.name, version));
 
     if (!fs.existsSync(Constants.bundlesDirectory)) {

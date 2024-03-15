@@ -1,4 +1,5 @@
 import { Constants } from './constants';
+import { PackageConfiguration, readPackageConfiguration } from './package-config';
 import { Scopes } from './scopes';
 
 const express = require('express');
@@ -27,11 +28,6 @@ export class Serve {
     let compilerOutput = '';
     let compilerStartedAt;
 
-    const readPackageConfiguration = () => {
-      return JSON.parse(fs.readFileSync(Constants.packageFile).toString());
-    };
-
-    console.log(`reading ${Constants.packageFile}...`);
     let packageConfiguration = readPackageConfiguration();
 
     const assetsPath = path.join(process.cwd(), 'assets');
@@ -201,7 +197,7 @@ export class Serve {
     });
   }
 
-  printOpenLinkMessage(packageConfiguration, server) {
+  printOpenLinkMessage(packageConfiguration: PackageConfiguration, server) {
     console.log(
       `\nopen the following link to try out '${packageConfiguration.name}'\n→ \x1b[1m\x1b[4m${this.host}/workspaces#${packageConfiguration.name}:${server.address().port}\x1b[0m\n\n\n`
     );
