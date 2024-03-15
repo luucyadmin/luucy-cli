@@ -22,7 +22,7 @@ export class Publisher {
   async publish(version: string | undefined) {
     const packageConfiguration = this.readPackageConfig();
     this._build(packageConfiguration);
-    this.changeVersion(packageConfiguration, version);
+    version = this.changeVersion(packageConfiguration, version);
     await this.bundle(packageConfiguration, version);
   }
 
@@ -64,6 +64,7 @@ export class Publisher {
 
       process.exit(1);
     }
+    return version;
   }
 
   private async bundle(packageConfiguration, version) {
