@@ -1,6 +1,6 @@
 import { Constants } from './constants';
 
-const fs = require('fs');
+import fs = require('fs');
 
 export type PackageConfiguration = {
   name: string;

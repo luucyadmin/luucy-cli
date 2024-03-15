@@ -2,10 +2,10 @@ import { Constants } from './constants';
 import { writePackageConfiguration } from './package-config';
 import { Scopes } from './scopes';
 
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline-sync');
-const childProcess = require('child_process');
+import fs = require('fs');
+import path = require('path');
+import readline = require('readline-sync');
+import childProcess = require('child_process');
 
 export class Creator {
   create() {

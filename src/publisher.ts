@@ -1,11 +1,11 @@
 import { Constants } from './constants';
 import { PackageConfiguration, readPackageConfiguration } from './package-config';
 
-const fs = require('fs');
-const path = require('path');
-const tar = require('tar');
-const childProcess = require('child_process');
-const readline = require('readline-sync');
+import fs = require('fs');
+import path = require('path');
+import tar = require('tar');
+import childProcess = require('child_process');
+import readline = require('readline-sync');
 
 export class Publisher {
   constructor() {}

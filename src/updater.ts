@@ -1,7 +1,7 @@
 import { Constants } from './constants';
 import { readPackageConfiguration } from './package-config';
 
-const childProcess = require('child_process');
+import childProcess = require('child_process');
 
 export class Updater {
   async update(useNext: boolean, branch: string) {
