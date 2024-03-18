@@ -1,11 +1,14 @@
 import { Constants } from './constants';
+import { PackageConfiguration, readPackageConfiguration } from './package-config';
 import { Scopes } from './scopes';
 
-const express = require('express');
-const childProcess = require('child_process');
-const ws = require('express-ws');
-const fs = require('fs');
-const path = require('path');
+import express = require('express');
+import childProcess = require('child_process');
+import ws = require('express-ws');
+import fs = require('fs');
+import path = require('path');
+import { Server } from 'http';
+import { AddressInfo } from 'net';
 
 export class Serve {
   constructor(private readonly host: string) {}
@@ -21,17 +24,11 @@ export class Serve {
 
   start() {
     console.log('creating server...');
-    const app = express();
-    ws(app);
+    const app = ws(express()).app;
 
     let compilerOutput = '';
-    let compilerStartedAt;
+    let compilerStartedAt: Date | null = null;
 
-    const readPackageConfiguration = () => {
-      return JSON.parse(fs.readFileSync(Constants.packageFile).toString());
-    };
-
-    console.log(`reading ${Constants.packageFile}...`);
     let packageConfiguration = readPackageConfiguration();
 
     const assetsPath = path.join(process.cwd(), 'assets');
@@ -53,7 +50,7 @@ export class Serve {
 
       process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ↔ connected to ${this.host}! sending plugin...\x1b[0m\n`);
 
-      let source;
+      let source: string;
 
       if (fs.existsSync(Constants.distFile)) {
         source = fs.readFileSync(Constants.distFile).toString();
@@ -85,7 +82,7 @@ export class Serve {
       fs.watch(Constants.packageFile, () => update());
 
       socket.on('message', (data) => {
-        const message = JSON.parse(data);
+        const message = JSON.parse(data.toString());
 
         if (message.installed) {
           process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ✓ installed ${packageConfiguration.name}\x1b[0m\n`);
@@ -173,8 +170,9 @@ export class Serve {
               process.stdout.write('\n');
             }
           } else {
+            const time = new Date().getTime() - compilerStartedAt.getTime();
             process.stdout.write(
-              `\x1b[2m\x1b[2K\r[${new Date().toLocaleTimeString()}] ✓ successfully compiled '${packageConfiguration.name}' (${+new Date() - compilerStartedAt}ms)\x1b[0m\n`
+              `\x1b[2m\x1b[2K\r[${new Date().toLocaleTimeString()}] ✓ successfully compiled '${packageConfiguration.name}' (${time}ms)\x1b[0m\n`
             );
           }
 
@@ -201,13 +199,13 @@ export class Serve {
     });
   }
 
-  printOpenLinkMessage(packageConfiguration, server) {
+  printOpenLinkMessage(packageConfiguration: PackageConfiguration, server: Server) {
     console.log(
-      `\nopen the following link to try out '${packageConfiguration.name}'\n→ \x1b[1m\x1b[4m${this.host}/workspaces#${packageConfiguration.name}:${server.address().port}\x1b[0m\n\n\n`
+      `\nopen the following link to try out '${packageConfiguration.name}'\n→ \x1b[1m\x1b[4m${this.host}/workspaces#${packageConfiguration.name}:${(server.address() as AddressInfo).port}\x1b[0m\n\n\n`
     );
   }
 
-  bundle(source: string, packageConfiguration) {
+  bundle(source: string, packageConfiguration: PackageConfiguration) {
     return JSON.stringify({
       name: packageConfiguration.name,
       configuration: packageConfiguration,

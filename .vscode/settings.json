@@ -2,21 +2,21 @@
   "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     },
     "editor.formatOnSave": false
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     },
     "editor.formatOnSave": false
   },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     },
     "editor.formatOnSave": false
   },
@@ -25,5 +25,11 @@
       "source.fixAll.eslint": "explicit"
     }
   },
-  "typescript.tsdk": "./node_modules/typescript/lib"
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "cSpell.words": [
+    "Heatwatt",
+    "luucy",
+    "luucyadmin",
+    "xlink"
+  ]
 }

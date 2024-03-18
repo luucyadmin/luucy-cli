@@ -1,10 +1,11 @@
 import { Constants } from './constants';
+import { writePackageConfiguration } from './package-config';
 import { Scopes } from './scopes';
 
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline-sync');
-const childProcess = require('child_process');
+import fs = require('fs');
+import path = require('path');
+import readline = require('readline-sync');
+import childProcess = require('child_process');
 
 export class Creator {
   create() {
@@ -49,26 +50,19 @@ export class Creator {
 `.trim()
     );
 
-    fs.writeFileSync(
-      Constants.packageFile,
-      JSON.stringify(
-        {
-          name: id,
-          displayName: name,
-          icon: 'icon.svg',
-          author: author,
-          version: '1.0.0',
-          scopes: ['core', 'ui']
-        },
-        null,
-        '\t'
-      )
-    );
+    writePackageConfiguration({
+      name: id,
+      displayName: name,
+      icon: 'icon.svg',
+      author: author,
+      version: '1.0.0',
+      scopes: ['core', 'ui']
+    });
 
     fs.writeFileSync(
       'plugin.ts',
       `
-		
+
 const section = ui.createProjectPanelSection();
 section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
 
@@ -103,7 +97,7 @@ section.add(new ui.Label(${JSON.stringify(`Hello World, ${name}!`)}));
 	<polygon fill-opacity="0.77" fill="#FFFFFF" points="245 242.053 315.041416 63 458 226.947 387.958584 406"></polygon>
 	<polygon fill-opacity="0.60" fill="#C7C7C7" points="315 63 245.436466 241.406223 59 287 127.266236 106.831979"></polygon>
 </svg>
-		
+
 		`.trim();
   }
 }

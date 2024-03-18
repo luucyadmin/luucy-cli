@@ -77,6 +77,8 @@ luucy serve             Debug plugin locally
     --test              Launch debugger for http://localhost:4200 (test environment)
     --staging           Launch debugger for https://staging.luucy.ch (staging environment)
     --productive        Launch debugger for https://app.luucy.ch (productive environment)
+luucy build             Build a plugin
+    [--dry]             Dry run without creating a bundle. Useful for checking for compilation errors
 luucy publish           Publish a plugin to the luucy marketplace
     [{version}]         New version name. Typically an increment of semantic version (e.g. 1.0.1)
 luucy upgrade           Upgrades the luucy type mappings

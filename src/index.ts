@@ -43,6 +43,15 @@ switch (parameters.shift()) {
     break;
   }
 
+  case 'build': {
+    const publisher = new Publisher();
+    publisher.build(process.argv.includes('--dry')).then(() => {
+      process.exit(0);
+    });
+
+    break;
+  }
+
   case 'publish': {
     const publisher = new Publisher();
     publisher.publish(parameters.shift()).then(() => {

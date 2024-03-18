@@ -1,8 +1,9 @@
 import { Constants } from './constants';
+import { PackageConfiguration, readPackageConfiguration, writePackageConfiguration } from './package-config';
 
-const path = require('path');
-const fs = require('fs');
-const readline = require('readline-sync');
+import path = require('path');
+import fs = require('fs');
+import readline = require('readline-sync');
 
 export class Scopes {
   add(name: string) {
@@ -12,22 +13,22 @@ export class Scopes {
       );
     }
 
-    const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
+    const packageConfiguration: PackageConfiguration = readPackageConfiguration();
 
     this.addScope(packageConfiguration, name);
 
-    packageConfiguration.scopes = packageConfiguration.scopes.sort((a, b) => a > b);
+    packageConfiguration.scopes = packageConfiguration.scopes.sort();
 
-    fs.writeFileSync(Constants.packageFile, JSON.stringify(packageConfiguration, null, '\t'));
+    writePackageConfiguration(packageConfiguration);
 
     this.build();
 
-    process.stdout.write(`\nscope '${name}' added successfuly\n\n`);
+    process.stdout.write(`\nscope '${name}' added successfully\n\n`);
 
     return true;
   }
 
-  private addScope(packageConfiguration, name: string) {
+  private addScope(packageConfiguration: PackageConfiguration, name: string) {
     const info = this.info(name);
 
     if (info.permission) {
@@ -68,7 +69,7 @@ export class Scopes {
   }
 
   build() {
-    const packageConfiguration = JSON.parse(fs.readFileSync(Constants.packageFile).toString());
+    const packageConfiguration: PackageConfiguration = readPackageConfiguration();
     const available = this.list();
 
     const declarations = [];

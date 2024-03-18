@@ -1,4 +1,4 @@
-const path = require('path');
+import path = require('path');
 
 export class Constants {
   static distFile = 'dist.lps';
