@@ -1,3 +1,9 @@
+# [6.5.1](https://github.com/luucyadmin/luucy-cli/releases/tag/v6.5.1)
+## Changed
+
+Updated the environment list
+Updated the dependencies
+
 # [6.5.0](https://github.com/luucyadmin/luucy-cli/releases/tag/v6.5.0)
 
 [Detailed changes](https://github.com/luucyadmin/luucy-cli/compare/v6.4.0...v6.5.0)
