@@ -31,8 +31,9 @@ export class Constants {
   static managedTypes = path.join(this.managed, 'types.d.ts');
 
   static environments = {
-    test: 'http://localhost:4200',
-    staging: 'https://staging.luucy.ch',
+    local: 'http://localhost:4200',
+    dev: 'https://app.dev.dev.luucy.ch',
+    test: 'https://app.test.dev.luucy.ch',
     productive: 'https://app.luucy.ch'
   };
 }
