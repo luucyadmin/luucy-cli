@@ -70,16 +70,17 @@ luucy help
    + + + +    / / / / / / / / ___/ / / /
    + + + +   / / /_/ / /_/ / /__/ /_/ /
    · + + ·  /_/\__,_/\__,_/\___/\__, /
-     · ·    v6.3.0             /____/
+     · ·    v6.5.2             /____/
 
 luucy create            Creates an empty plugin locally
 luucy serve             Debug plugin locally
-    --test              Launch debugger for http://localhost:4200 (test environment)
-    --staging           Launch debugger for https://staging.luucy.ch (staging environment)
+    --local             Launch debugger for http://localhost:4200 (local environment)
+    --dev               Launch debugger for https://app.dev.dev.luucy.ch (dev environment)
+    --test              Launch debugger for https://app.test.dev.luucy.ch (test environment)
     --productive        Launch debugger for https://app.luucy.ch (productive environment)
 luucy build             Build a plugin
     [--dry]             Dry run without creating a bundle. Useful for checking for compilation errors
-luucy publish           Publish a plugin to the luucy marketplace
+luucy publish           Build and publish a plugin to the luucy marketplace
     [{version}]         New version name. Typically an increment of semantic version (e.g. 1.0.1)
 luucy upgrade           Upgrades the luucy type mappings
     --next [{branch}]   Upgrades to next version, for testing only
