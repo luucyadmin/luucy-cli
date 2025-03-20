@@ -4,7 +4,7 @@ import { Scopes } from './scopes';
 
 import express = require('express');
 import childProcess = require('child_process');
-import ws = require('express-ws');
+import WebSocket = require('ws');
 import fs = require('fs');
 import path = require('path');
 import { Server } from 'http';
@@ -24,7 +24,7 @@ export class Serve {
 
   start() {
     console.log('creating server...');
-    const app = ws(express()).app;
+    const app = express();
 
     let compilerOutput = '';
     let compilerStartedAt: Date | null = null;
@@ -37,15 +37,20 @@ export class Serve {
 
     app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
-
       next();
     });
 
     app.use('/assets', express.static(assetsPath));
 
-    const sockets = [];
+    const server = app.listen(0, () => {
+      this.printOpenLinkMessage(packageConfiguration, server);
+    });
 
-    app.ws('/socket', (socket) => {
+    const wss = new WebSocket.Server({ server });
+
+    const sockets: WebSocket[] = [];
+
+    wss.on('connection', (socket) => {
       sockets.push(socket);
 
       process.stdout.write(`\x1b[2m[${new Date().toLocaleTimeString()}] ↔ connected to ${this.host}! sending plugin...\x1b[0m\n`);
@@ -193,10 +198,6 @@ export class Serve {
     });
 
     console.log('starting server...');
-
-    const server = app.listen(0, () => {
-      this.printOpenLinkMessage(packageConfiguration, server);
-    });
   }
 
   printOpenLinkMessage(packageConfiguration: PackageConfiguration, server: Server) {
